@@ -1,0 +1,216 @@
+﻿@model PagedViewModel<BlogPost>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div class="page-body">
+    <div class="page-wrapper">
+        <div class="page-header">
+            <div class="row align-items-end">
+                <div class="col-lg-8">
+                    <div class="page-header-title">
+                        <div class="d-inline">
+                            <h4>Bootstrap Border Sizes</h4>
+                            <span>
+                                lorem ipsum dolor sit amet, consectetur adipisicing
+                                elit
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="page-header-breadcrumb">
+                        <ul class="breadcrumb-title">
+                            <li class="breadcrumb-item" style="float: left;">
+                                <a asp-controller="Dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+                            </li>
+
+                            <li class="breadcrumb-item" style="float: left;">
+                                <span>BlogPosts</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-body">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Horizontal Borders</h5>
+                    <span>
+                        Example of <code>horizontal</code> table borders. This is a
+                        default table border style attached to <code>.table</code> class.
+                        All borders have the same grey color and style, table itself doesn't
+                        have a border, but you can add this border using
+                        <code>.table-framed</code> class added to the table with
+                        <code>.table</code> class.
+                    </span>
+
+                </div>
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        Title
+                                    </th>
+                                    <th>
+                                        Body
+                                    </th>
+                                    <th>
+                                        PublishedDate
+                                    </th>
+
+                                    <th class="operations">
+                                        @if (User.HasAccess("admin.blogposts.create"))
+                                        {
+                                            <a asp-action="Create" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        }
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td class="image-cell">
+                                            @if (!string.IsNullOrWhiteSpace(item.ImagePath))
+                                            {
+                                                <img src="~/uploads/images/@item.ImagePath" class="img-fluid">
+                                            }
+                                        </td>
+                                        <td class="ellipse">
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                        </td>
+                                        <td class="ellipse ">
+                                            @item.Body.ToPlainText();
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.PublishedDate)
+                                        </td>
+
+                                        <td class="table-imaged nowidth">
+                                            @if (User.HasAccess("admin.blogposts.publish"))
+                                            {
+                                                <a class="btn btn-sm btn-secondary" onclick="publishDate(@item.Id, '@item.Title')"><i class="fa-solid fa-upload"></i></a>
+                                            }
+                                            @if (User.HasAccess("admin.blogposts.edit"))
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="fa-solid fa-pencil"></i></a>
+                                            }
+                                            @if (User.HasAccess("admin.blogposts.details"))
+                                            {
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="fa-solid fa-eye"></i></a>
+                                            }
+                                            @if (User.HasAccess("admin.blogposts.delete"))
+                                            {
+                                                <a class="btn btn-sm btn-danger" onclick="removeEntity(@item.Id, '@item.Title')"><i class="fa-solid fa-trash-can"></i></a>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @Model.GetPager(Url, "Index", "Admin")
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.AntiForgeryToken()
+    </div>
+</div>
+
+@section addjs{
+    <script src="~/lib/sweetalert/sweetalert.min.js"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+    <script src="~/lib/toastr.js/toastr.customize.js"></script>
+
+    <script class="removeable">
+        function removeEntity(id, name) {
+            swal(`Are you sure you want to delete ${name}?`, {
+                title: "Diqqet!",
+                text: `Are you sure you want to delete ${name}?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["No", "Yes"]
+            })
+                .then((value) => {
+                    if (value == true) {
+                        let vToken = $('[name=__RequestVerificationToken]').val();
+                        let formData = new FormData();
+                        formData.set('__RequestVerificationToken', vToken);
+                        formData.set('id', id);
+                        $.ajax({
+                            url: `@Url.Action("Delete")`,
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                console.log(response)
+                                if (response.error == true) {
+                                    toaster.error(response.message, "Xeta");
+                                    return;
+                                }
+                                location.reload();
+                            },
+                            error: function (errorResponse) {
+                                console.error(errorResponse);
+                            }
+                        });
+                    }
+                });
+        }
+        function publishDate(id, name) {
+            swal(`Are you sure you want to publish ${name}?`, {
+                title: "Diqqet!",
+                text: `Are you sure you want to publish ${name}?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["No", "Yes"]
+            })
+                .then((value) => {
+                    if (value == true) {
+                        let vToken = $('[name=__RequestVerificationToken]').val();
+                        let formData = new FormData();
+                        formData.set('__RequestVerificationToken', vToken);
+                        formData.set('id', id);
+                        $.ajax({
+                            url: `@Url.Action("Publish")`,
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                console.log(response)
+                                if (response.error == true) {
+                                    toaster.error(response.message, "Xeta");
+                                    return;
+                                }
+                                location.reload();
+                            },
+                            error: function (errorResponse) {
+                                console.error(errorResponse);
+                            }
+                        });
+                    }
+                });
+        }
+    </script>
+    }
+
+    @section addcss{
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.css">
+}

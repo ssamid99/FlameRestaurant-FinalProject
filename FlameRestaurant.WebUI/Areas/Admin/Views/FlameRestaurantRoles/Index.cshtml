@@ -1,0 +1,151 @@
+﻿@model List<FlameRestaurantRole>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Rollar</h1>
+
+@section addcss{
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css">
+}
+
+
+    <div class="page-wrapper">
+        <div class="page-header">
+            <div class="row align-items-end">
+                <div class="col-lg-8">
+                    <div class="page-header-title">
+                        <div class="d-inline">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="page-header-breadcrumb">
+                        <ul class="breadcrumb-title">
+                            <li class="breadcrumb-item" style="float: left;">
+                                <a asp-controller="Dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+                            </li>
+
+                            <li class="breadcrumb-item" style="float: left;">
+                                <span>Rollar</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-body">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Horizontal Borders</h5>
+                    <span>
+                        Example of <code>horizontal</code> table borders. This is a
+                        default table border style attached to <code>.table</code> class.
+                        All borders have the same grey color and style, table itself doesn't
+                        have a border, but you can add this border using
+                        <code>.table-framed</code> class added to the table with
+                        <code>.table</code> class.
+                    </span>
+
+                </div>
+                <div class="card-block table-border-style">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Rol Adı
+                                    </th>
+                                    <th>
+                                        NormalizedName
+                                    </th>
+
+                                    <th class="operations">
+                                    @if (User.HasAccess("admin.flamerestaurantroles.create"))
+                                    {
+                                        <a asp-action="Create" class="btn btn-sm btn-primary">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                    }
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td class="ellipse">
+                                        @item.NormalizedName
+                                    </td>
+                                    <td class="operations table-imaged">
+                                        @if (User.HasAccess("admin.flamerestaurantroles.edit"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="fa-solid fa-pencil"></i></a>
+                                        }
+                                        @if (User.HasAccess("admin.flamerestaurantroles.details"))
+                                        {
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="fa-solid fa-eye"></i></a>
+                                        }
+                                        @if (User.HasAccess("admin.flamerestaurantroles.delete"))
+                                        {
+                                            <a class="btn btn-sm btn-danger" onclick="removeEntity(@item.Id, '@item.Name')"><i class="fa-solid fa-trash-can"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.AntiForgeryToken()
+</div>
+
+@section addjs{
+
+    <script class="removeable">
+        function removeEntity(id, number) {
+            swal(`Are you sure you want to delete ${number}?`, {
+                title: "Diqqet!",
+                text: `Silmək istədiyinizdən əminsiniz ${number}?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["No", "Yes"]
+            })
+                .then((value) => {
+                    if (value == true) {
+                        let vToken = $('[name=__RequestVerificationToken]').val();
+                        let formData = new FormData();
+                        formData.set('__RequestVerificationToken', vToken);
+                        formData.set('id', id);
+                        $.ajax({
+                            url: `@Url.Action("Delete")`,
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                console.log(response)
+                                if (response.error == true) {
+                                    toaster.error(response.message, "Xəta");
+                                    return;
+                                }
+                                location.reload();
+                            },
+                            error: function (errorResponse) {
+                                console.error(errorResponse);
+                            }
+                        });
+                    }
+                });
+        }
+
+    </script>
+    }

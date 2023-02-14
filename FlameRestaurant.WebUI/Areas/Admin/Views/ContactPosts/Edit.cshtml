@@ -1,0 +1,164 @@
+﻿@model ContactPost
+
+
+@{
+    ViewData["Title"] = "Answer";
+}
+
+<h1>Answer</h1>
+
+<h4>BlogPost</h4>
+<hr />
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>Bootstrap Border Sizes</h4>
+                        <span>
+                            lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title">
+                        <li class="breadcrumb-item" style="float: left;">
+                            <a asp-controller="Dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        @if (User.HasAccess("admin.contactposts.index"))
+                        {
+                            <li class="breadcrumb-item" style="float: left;">
+                                <a asp-action="index">BlogPosts</a>
+                            </li>
+                        }
+                        <li class="breadcrumb-item" style="float: left;">
+                            <span>Create</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Basic Form Inputs</h5>
+                        <span>
+                            Add class of <code>.form-control</code> with
+                            <code>&lt;input&gt;</code> tag
+                        </span>
+
+
+                        <div class="card-header-right">
+                            <i class="icofont icofont-spinner-alt-5"></i>
+                        </div>
+
+                    </div>
+                    <div class="card-block">
+                        <h4 class="sub-title">Basic Inputs</h4>
+
+                        <form id="answerContact" method="post">
+                            <div class="form-group row">
+                                <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+                                <div>
+                                    @Html.Raw(Model.Name)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Email" class="col-sm-2 col-form-label"></label>
+                                <div>
+                                    @Html.Raw(Model.Email)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label asp-for="Message" class="col-sm-2 col-form-label"></label>
+                                <div>
+                                    @Html.Raw(Model.Message)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Body</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="Id" hidden />
+                                    <input asp-for="Name" hidden />
+                                    <input asp-for="Email" hidden />
+                                    <input asp-for="Message" />
+                                    <textarea asp-for="Answer" class="form-control" id="answer"></textarea>
+                                    <span asp-validation-for="Answer" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12 d-flex justify-content-end">
+                                    @if (Model.AnswerDate == null)
+                                    {
+                                        <button class="btn btn-primary mr-2">Save</button>
+                                    }
+                                    @if (User.HasAccess("admin.contactposts.index"))
+                                    {
+                                        <a asp-action="index" class="btn btn-info">Cancel</a>
+                                    }
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section addjs {
+    <script class="removeable" src="~/lib/ckeditor5/ckeditor.min.js"></script>
+    <script class="removeable" src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+    <script src="~/lib/toastr.js/toastr.customize.js"></script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#answer'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#answerContact').submit(function (e) {
+                e.preventDefault();
+
+                let formData = new FormData(e.currentTarget);
+
+                $.ajax({
+                    url: '@Url.Action("Edit", "ContactPosts")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.error == true) {
+                            toastr.error(response.message, "Ugursuz!");
+                        } else {
+                            toastr.success(response.message, "Ugurlu!");
+                        }
+                        e.currentTarget.reset();
+                    },
+                    error: function (response) {
+                        toastr.error(response.message, "Ugursuz!")
+                    }
+                })
+            })
+        })
+    </script>
+}
+    @section addcss{
+    <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
+
+}
+

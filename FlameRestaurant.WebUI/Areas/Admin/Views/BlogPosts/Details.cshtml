@@ -1,0 +1,249 @@
+﻿@model BlogPost
+
+@{
+    ViewData["Title"] = "Edit";
+
+    IEnumerable<BlogPostComment> GetComments(BlogPostComment parent)
+    {
+        if (parent.ParentId != null && parent.DeletedDate == null)
+        {
+            yield return parent;
+        }
+        foreach (var item in parent.Children.Where(p => p.Parent != null && p.Parent.DeletedDate == null).SelectMany(c => GetComments(c)))
+        {
+            yield return item;
+        }
+    }
+}
+
+<h1>Edit</h1>
+
+<h4>BlogPost</h4>
+<hr />
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>Bootstrap Border Sizes</h4>
+                        <span>
+                            lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title">
+                        <li class="breadcrumb-item" style="float: left;">
+                            <a asp-controller="Dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        <li class="breadcrumb-item" style="float: left;">
+                            <a asp-action="index">BlogPosts</a>
+                        </li>
+                        <li class="breadcrumb-item" style="float: left;">
+                            <span>Detallı</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Basic Form Inputs</h5>
+                        <span>
+                            Add class of <code>.form-control</code> with
+                            <code>&lt;input&gt;</code> tag
+                        </span>
+
+
+                        <div class="card-header-right">
+                            <i class="icofont icofont-spinner-alt-5"></i>
+                        </div>
+
+                    </div>
+                    <div class="card-block">
+                        <h4 class="sub-title">Basic Inputs</h4>
+
+                        <div>
+                            <div class="form-group row ">
+                                <label asp-for="Title" class="col-sm-2 col-form-label"></label>
+                                <p class="fix-row">
+                                    @Model.Title
+                                </p>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Image</label>
+                                <div class="col-sm-10">
+                                    <label class="image-viewer" style="background-image:url(/uploads/images/@Model.ImagePath)"></label>
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label asp-for="Body" class="col-sm-2 col-form-label"></label>
+                                <div class="fix-row">
+                                    @Html.Raw(Model.Body)
+                                </div>
+                            </div>
+
+                            <button onclick="showorHide()" class="button-1 btn btn-sm btn-primary">Comments (@Model.Comments.Count())</button>
+                            <button onclick="hideorShow()" class="button-2 btn btn-sm btn-primary" style="display:none">Comments</button>
+                            <div class="commentall" style="display:none">
+                                <ul>
+
+                                    @foreach (var comment in Model.Comments.Where(c => c.ParentId == null && c.DeletedDate == null))
+                                    {
+                                        <!-- Comments -->
+                                        <li class="margin-bottom-30 comment" id="c-@comment.Id" data-comment-id="@comment.Id">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <div class="avatar"><img src="images/avatar-1.jpg" alt=""></div>
+                                                </div>
+                                                <div class="media-body">
+                                                    <div class="a-com">
+                                                        <span class="a-name text-color-primary">@($"{comment.CreatedByUser?.Name} {comment.CreatedByUser?.Surname}")</span><span class="date">@comment.CreatedDate.ToString("MMMM d,yyyy HH:mm")</span>
+                                                        <p class="margin-top-20">
+                                                            @comment.Text.ToPlainText()
+                                                        </p>
+                                                        @if (User.HasAccess("admin.blogposts.deletecomment"))
+                                                        {
+                                                            <a class="btn btn-sm btn-danger" onclick="removeComment(@comment.Id, '@comment.Text')"><i class="fa-solid fa-trash-can"></i></a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        @foreach (var subComment in GetComments(comment))
+                                        {
+                                            <!-- Comments Replay -->
+                                            <li class="com-reply comment" id="c-@subComment.Id" data-comment-id="@subComment.Id">
+                                                <div class="media">
+                                                    <div class="media-left">
+                                                        <div class="avatar"><img src="images/avatar-2.jpg" alt=""></div>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <div class="a-com">
+                                                            <span class="a-name ">@($"{subComment.CreatedByUser?.Name} {subComment.CreatedByUser?.Surname}")</span><span class="date">@subComment.CreatedDate.ToString("MMMM d,yyyy HH:mm")</span>
+                                                            <p class="margin-top-20">
+                                                                <a href="#c-@subComment.ParentId">@@@subComment.Parent.CreatedByUser?.Name</a>
+                                                                @subComment.Text.ToPlainText()
+                                                            </p>
+                                                        </div>
+                                                        @if (User.HasAccess("admin.blogposts.deletecomment"))
+                                                        {
+                                                            <a class="btn btn-sm btn-danger" onclick="removeComment(@subComment.Id, '@subComment.Text')"><i class="fa-solid fa-trash-can"></i></a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12 d-flex justify-content-end">
+                                    @if (User.HasAccess("admin.blogposts.edit"))
+                                    {
+                                        <a asp-action="edit" name="" asp-route-id=@Model.Id class="btn btn-warning mr-2 fix-btn">Edit</a>
+                                    }
+                                    @if (User.HasAccess("admin.blogposts.index"))
+                                    {
+                                        <a asp-action="index" class="btn btn-info">Cancel</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section addcss{
+    <style>
+        li.comment {
+            border: 1px solid grey;
+            margin-top: 5px;
+        }
+
+        li.com-reply {
+            margin-left: 50px;
+        }
+    </style>
+}
+
+    @section addjs{
+    <script src="~/lib/sweetalert/sweetalert.min.js"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+    <script src="~/lib/toastr.js/toastr.customize.js"></script>
+
+    <script class="removeable">
+        function removeComment(id, name) {
+            swal(`Are you sure you want to delete ${name}?`, {
+                title: "Diqqet!",
+                text: `Are you sure you want to delete ${name}?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["No", "Yes"]
+            })
+                .then((value) => {
+
+                    if (value == true) {
+
+                        let vToken = $('[name=__RequestVerificationToken]').val();
+
+                        let formData = new FormData();
+                        formData.set('__RequestVerificationToken', vToken);
+                        formData.set('id', id);
+
+                        $.ajax({
+                            url: `@Url.Action("DeleteComment")`,
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                console.log(response)
+                                if (response.error == true) {
+                                    toaster.error(response.message, "Xeta");
+                                    return;
+                                }
+                                location.reload();
+                            },
+                            error: function (errorResponse) {
+                                console.error(errorResponse);
+                            }
+                        });
+                    }
+
+
+                });
+
+        }
+    </script>
+
+    <script>
+
+        function showorHide() {
+            document.querySelector('div.commentall').style.display = 'block';
+            document.querySelector('button.button-2').style.display = 'block';
+            document.querySelector('button.button-1').style.display = 'none';
+
+
+        }
+        function hideorShow() {
+            document.querySelector('div.commentall').style.display = 'none';
+            document.querySelector('button.button-2').style.display = 'none';
+            document.querySelector('button.button-1').style.display = 'block';
+        }
+    </script>
+}
+

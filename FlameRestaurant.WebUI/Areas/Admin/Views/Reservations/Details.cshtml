@@ -1,0 +1,158 @@
+﻿@model Reservation
+
+@{
+    ViewData["Title"] = "Details";
+
+
+}
+
+<h1>Detallı</h1>
+
+<h4>Rezervasiyalar</h4>
+<hr />
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>Bootstrap Border Sizes</h4>
+                        <span>
+                            lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title">
+                        <li class="breadcrumb-item" style="float: left;">
+                            <a asp-controller="Dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        @if (User.HasAccess("admin.reservations.index"))
+                        {
+                            <li class="breadcrumb-item" style="float: left;">
+                                <a asp-action="index">Rezervasiyalar</a>
+                            </li>
+                        }
+                        <li class="breadcrumb-item" style="float: left;">
+                            <span>Detallı</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Basic Form Inputs</h5>
+                        <span>
+                            Add class of <code>.form-control</code> with
+                            <code>&lt;input&gt;</code> tag
+                        </span>
+
+
+                        <div class="card-header-right">
+                            <i class="icofont icofont-spinner-alt-5"></i>
+                        </div>
+
+                    </div>
+                    <div class="card-block">
+                        <h4 class="sub-title">Basic Inputs</h4>
+
+                        <div>
+                            <div class="form-group row ">
+                                <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+                                <div class="fix-row">
+                                    @Model.Name
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label asp-for="NumberofPeople" class="col-sm-2 col-form-label"></label>
+                                <div class="fix-row">
+                                    @Model.NumberofPeople
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label asp-for="Date" class="col-sm-2 col-form-label"></label>
+                                <div class="fix-row">
+                                    @Html.Raw(Model.Date)
+                                </div>
+                            </div>
+                            <div class="form-group row ">
+                                <label asp-for="Time" class="col-sm-2 col-form-label"></label>
+                                <div class="fix-row">
+                                    @Model.Time
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12 d-flex justify-content-end">
+                                    @if (User.HasAccess("admin.reservations.edit"))
+                                    {
+                                        <a asp-action="edit" name="" asp-route-id=@Model.Id class="btn btn-warning mr-2 fix-btn">Edit</a>
+                                    }
+                                    @if (User.HasAccess("admin.reservations.delete"))
+                                    {
+                                        <a class="btn btn-sm btn-danger fix-btn" onclick="removeEntity(@Model.Id, '@Model.Name')"><i class="fa-solid fa-trash-can"></i></a>
+                                    }
+                                    @if (User.HasAccess("admin.reservations.index"))
+                                    {
+                                        <a asp-action="index" class="btn btn-info">Cancel</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section addjs{
+
+    <script class="removeable">
+        function removeEntity(id, name) {
+            swal(`Are you sure you want to delete ${name}?`, {
+                title: "Diqqet!",
+                text: `${name} adına olan reservasiyani silmək istədiyinizdən əminsiniz?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["No", "Yes"]
+            })
+                .then((value) => {
+                    if (value == true) {
+                        let vToken = $('[name=__RequestVerificationToken]').val();
+                        let formData = new FormData();
+                        formData.set('__RequestVerificationToken', vToken);
+                        formData.set('id', id);
+                        $.ajax({
+                            url: `@Url.Action("Delete")`,
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                console.log(response)
+                                if (response.error == true) {
+                                    toaster.error(response.message, "Xəta");
+                                    return;
+                                }
+                                location.reload();
+                            },
+                            error: function (errorResponse) {
+                                console.error(errorResponse);
+                            }
+                        });
+                    }
+                });
+        }
+
+    </script>
+    }
