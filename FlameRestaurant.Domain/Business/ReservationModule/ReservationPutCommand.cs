@@ -14,7 +14,6 @@ namespace FlameRestaurant.Domain.Business.ReservationModule
         public string Name { get; set; }
         public int NumberofPeople { get; set; }
         public DateTime Date { get; set; }
-        public TimeSpan Time { get; set; }
         public class ReservationPutCommandHandler : IRequestHandler<ReservationPutCommand, JsonResponse>
         {
             private readonly FlameRestaurantDbContext db;
@@ -34,7 +33,6 @@ namespace FlameRestaurant.Domain.Business.ReservationModule
                 data.Name = request.Name;
                 data.NumberofPeople = request.NumberofPeople;
                 data.Date = request.Date;
-                data.Time = request.Time;
                 
                 await db.SaveChangesAsync(cancellationToken);
 

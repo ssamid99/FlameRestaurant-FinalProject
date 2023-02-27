@@ -13,6 +13,5 @@ namespace FlameRestaurant.Domain.Models.Entities
         public string Name { get; set; }
         public int NumberofPeople { get; set; }
         public DateTime Date { get; set; }
-        public TimeSpan Time { get; set; }
     }
 }

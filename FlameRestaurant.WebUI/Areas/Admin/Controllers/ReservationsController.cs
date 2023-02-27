@@ -110,7 +110,6 @@ namespace FlameRestaurant.WebUI.Areas.Admin.Controllers
             editCommand.Name = reservation.Name;
             editCommand.NumberofPeople = reservation.NumberofPeople;
             editCommand.Date = reservation.Date;
-            editCommand.Time = reservation.Time;
             return View(editCommand);
         }
 

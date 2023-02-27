@@ -18,6 +18,9 @@ namespace FlameRestaurant.Domain.Models.DbContexts
         public DbSet<BlogPostComment> BlogPostComments { get; set; }
         public DbSet<ContactPost> ContactPosts { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductRate> ProductRates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -19,12 +19,6 @@ namespace FlameRestaurant.Domain.Models.DbContexts.Configurations
                 .HasMaxLength(50)
                 .IsRequired();
             builder.Property(c => c.Date)
-                .HasColumnName("Date")
-                .HasColumnType("date")
-                .IsRequired();
-            builder.Property(c => c.Time)
-                .HasColumnName("Time")
-                .HasColumnType("time")
                 .IsRequired();
         }
     }

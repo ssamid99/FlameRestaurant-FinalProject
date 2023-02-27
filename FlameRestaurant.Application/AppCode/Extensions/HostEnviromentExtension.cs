@@ -11,6 +11,11 @@ namespace FlameRestaurant.Application.AppCode.Extensions
             return Path.Combine(env.ContentRootPath, "wwwroot", "uploads", "images", fileName);
         }
 
+        static public string GetImagePhysicalPath(this string folder, string fileName)
+        {
+            return Path.Combine(folder, fileName);
+        }
+
         public static void ArchiveImages(this IHostEnvironment env, string fileName)
         {
             var imageActualPath = Path.Combine(env.ContentRootPath, "wwwroot", "uploads", "images", fileName);
