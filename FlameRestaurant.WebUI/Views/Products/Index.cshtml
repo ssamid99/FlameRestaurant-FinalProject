@@ -1,0 +1,257 @@
+﻿@model PagedViewModel<Product>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<main id="tg-main" class="tg-main tg-haslayout">
+    <!--************************************
+            Inner Banner Start
+    *************************************-->
+    <div class="tg-innerbanner tg-haslayout tg-parallax tg-bginnerbanner"
+         data-z-index="-100"
+         data-appear-top-offset="600"
+         data-parallax="scroll"
+         data-image-src=@Url.Content("~/assets/images/parallax/bgparallax-07.jpg")>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="tg-innerbannercontent">
+                        <h1>All Books</h1>
+                        <ol class="tg-breadcrumb">
+                            <li><a href="javascript:void(0);">home</a></li>
+                            <li class="tg-active">Books</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--************************************
+            Inner Banner End
+    *************************************-->
+    <!--************************************
+                News Grid Start
+        *************************************-->
+    <div class="tg-sectionspace tg-haslayout">
+        <div class="container">
+            <div class="row">
+                <div id="tg-twocolumns" class="tg-twocolumns">
+                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-9 pull-right">
+                        <div id="tg-content" class="tg-content">
+                            <div class="tg-products">
+                                <div class="tg-sectionhead">
+                                    <h2><span>People’s Choice</span>Bestselling Books</h2>
+                                </div>
+                                <div id="products">
+                                    <partial name="_Products" model="@Model" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--************************************
+                News Grid End
+        *************************************-->
+</main>
+
+@section addcss{
+    <style>
+        [data-entity-type] {
+            position: relative;
+            padding-left: 30px;
+            display: block;
+            cursor: pointer;
+        }
+
+            [data-entity-type]:not(.filled)::before {
+                content: "";
+                font-size: 0.7em;
+                font-weight: 900;
+                font-family: "Font Awesome 5 Free";
+                position: absolute;
+                border: 1px solid #cccccc85;
+                width: 18px;
+                height: 18px;
+                border-radius: 2px;
+                top: 50%;
+                left: 0px;
+                transform: translateY(-50%);
+                text-align: center;
+                text-indent: 1px;
+                line-height: 1.7em;
+            }
+
+            [data-entity-type].active:not(.filled)::before {
+                content: "\f00c";
+                color: #ffffff;
+                background-color: #cccccc85;
+                border-color: #cccccc85;
+            }
+
+            [data-entity-type].filled {
+                width: 30px;
+                height: 25px;
+                border-radius: 2px;
+                border: 1px solid #cccccc85;
+            }
+
+                [data-entity-type].filled::before {
+                    content: "";
+                    display: inline-block;
+                    padding-left: 1px;
+                    line-height: 7pt;
+                    font-size: 5pt;
+                    font-weight: 900;
+                    font-family: "Font Awesome 5 Free";
+                    position: absolute;
+                    top: 1px;
+                    right: 1px;
+                }
+
+                [data-entity-type].filled.active::before {
+                    content: "\f00c";
+                    color: #000000c4;
+                    background-color: #ffffff;
+                    border: 1px solid #000000c4;
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 100%;
+                }
+
+        #price-range[range]::before {
+            content: attr(range);
+            display: flex;
+            justify-content: center;
+            padding-top: 5px;
+        }
+
+        .def-cap {
+            font-size: 22px;
+            font-weight: 500;
+            color: #fff;
+            width: 100%;
+            padding: 0 20px;
+            border-radius: 5px;
+            background: #484848;
+            border-bottom: 1px solid #dbdbdb;
+        }
+
+        .def-item {
+            padding-bottom: 16px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .border-default .def-list {
+            overflow-y: scroll;
+            max-height: 206px;
+        }
+
+        .ui-slider-horizontal .ui-slider-handle {
+            top: -10px !important;
+            border-radius: 50px;
+            transition: all .3s ease-out;
+        }
+
+        .ui-widget.ui-widget-content {
+            height: 3px;
+        }
+
+        .ui-widget-content .ui-state-default {
+            border: 6px solid #000;
+            background: #fff;
+            font-weight: normal;
+            color: #454545;
+            margin-top: 1px;
+        }
+
+    </style>
+}
+
+    @section addjs{
+    <script>
+        const priceRangeData = $("#price-range").data();
+
+        const searchModel = {
+            authors: [],
+            publishers: [],
+            languages: [],
+            categories: [],
+            min: priceRangeData.priceMin,
+            max: priceRangeData.priceMax
+        };
+
+        $(document).ready(function() {
+            $('.blog-pagination.ptb-20')
+                .removeClass('blog-pagination')
+                .removeClass('ptb-20')
+                .addClass('list-inline');
+
+            $("#price-range")
+                .attr('range', `${searchModel.min}₼ - ${searchModel.max}₼`)
+                .slider({
+                    range: true,
+                    min: searchModel.min,
+                    max: searchModel.max,
+                    values: [searchModel.min, searchModel.max],
+                    slide: function(e, ui) {
+                        $(e.target).attr('range', `${ui.values[0]}₼ - ${ui.values[1]}₼`);
+                        searchModel.min = ui.values[0];
+                        searchModel.max = ui.values[1];
+
+                        filterProducts();
+                    }
+                });
+
+
+            $('[data-entity-type]').click(function(e) {
+
+                e.preventDefault();
+
+                let model = $(e.currentTarget).data();  //entityType  id
+
+                if ($(e.currentTarget).hasClass('active') == true) {
+                    $(e.currentTarget).removeClass('active');
+                    searchModel[`${model.entityType}`] = searchModel[`${model.entityType}`].filter(item => item != model.id);
+                }
+                else {
+                    $(e.currentTarget).addClass('active');
+
+                    if (searchModel[`${model.entityType}`].filter(item => item == model.id).length == 0) {
+                        searchModel[`${model.entityType}`].push(model.id);
+                    }
+                }
+
+                filterProducts();
+            });
+        });
+
+        function filterProducts() {
+            if ($.pid != undefined) {
+                clearTimeout($.pid);
+            }
+
+            $.pid = setTimeout(function() {
+                console.log(searchModel);
+
+                $.ajax({
+                    type: 'POST',
+                    data: searchModel,
+                    contentType: 'application/x-www-form-urlencoded',
+                    success: function(response) {
+
+                        $('#products').html(response);
+                        console.log(response);
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
+            }, 1500);
+        }
+    </script>
+}

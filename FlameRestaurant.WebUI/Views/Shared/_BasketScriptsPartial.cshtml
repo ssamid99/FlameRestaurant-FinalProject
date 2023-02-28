@@ -4,13 +4,13 @@
 <script>
     function removeFromBasket(element, name) {
 
-        swal(`Əminsiniz ki '${name}' silinsin?`, {
-            title: "Diqqət!",
-            text: `Əminsiniz ki '${name}' silinsin?`,
+        swal(`Are you sure to delete '${name}'?`, {
+            title: "Warning!",
+            text: `Are you sure to delete '${name}'?`,
             icon: "warning",
             buttons: true,
             dangerMode: true,
-            buttons: ["Xeyr", "Bəli"],
+            buttons: ["No", "Yes"],
         })
             .then((value) => {
 
@@ -23,7 +23,7 @@
                         type: 'POST',
                         data: elementData,
                         contentType: 'application/x-www-form-urlencoded',
-                        success: function(response) {
+                        success: function (response) {
                             if (response.error == false) {
                                 const removeTarget = $(element).attr('aria-remove-target');
                                 if (removeTarget != undefined) {
@@ -38,12 +38,13 @@
                                 }
 
                                 toastr.success(response.message, 'Success');
+                                location.reload();
                                 return;
                             }
 
                             toastr.error(response.message, 'Error');
                         },
-                        error: function(response, status, xhr) {
+                        error: function (response, status, xhr) {
                             console.log(response, status, xhr);
                         }
                     });
@@ -56,6 +57,8 @@
 
     function changeQuantity(event, element) {
 
+        console.log(element);
+
         if ($.processId != undefined) {
             clearTimeout($.processId);
             $.processId = undefined;
@@ -66,7 +69,7 @@
             return false;
         }
 
-        $.processId = setTimeout(function() {
+        $.processId = setTimeout(function () {
 
             const elementData = $(element).data();
             elementData.Quantity = element.value;
@@ -76,11 +79,14 @@
                 type: 'POST',
                 data: elementData,
                 contentType: 'application/x-www-form-urlencoded',
-                success: function(response) {
+                success: function (response) {
+                    console.log(response.value.price);
+                    console.log(response.value.total);
+                    console.log(response.value.summary);
                     if (response.error == false) {
 
-                        $(element).closest('tr').find('.amount').text(`${response.value.price}₼`);
-                        $(element).closest('tr').find('.product-subtotal').text(`${response.value.total}₼`);
+                        $(element).closest('section').find('.amount').text(`${response.value.price}₼`);
+                        $(element).closest('section').find('.product-subtotal').text(`${response.value.total}₼`);
                         $('#summary').text(`${response.value.summary}₼`);
                         toastr.success(response.message, 'Success');
                         return;
@@ -88,7 +94,7 @@
 
                     toastr.error(response.message, 'Error');
                 },
-                error: function(response, status, xhr) {
+                error: function (response, status, xhr) {
                     console.log(response, status, xhr);
                 }
             });

@@ -1420,12 +1420,12 @@
     @RenderSection("addjs",required:false)
 
     <script>
-        function addToFavorites(bookId) {
+        function addToFavorites(productId) {
             const favorites = ($.cookie('favorites') || '').split(',').filter(item => item.length > 0);
 
 
-            if (favorites.filter(item => item == bookId).length == 0) {
-                favorites.push(bookId);
+            if (favorites.filter(item => item == productId).length == 0) {
+                favorites.push(productId);
 
                 $.cookie('favorites', favorites.toString(), { path: '/', expires: 7 })
             }

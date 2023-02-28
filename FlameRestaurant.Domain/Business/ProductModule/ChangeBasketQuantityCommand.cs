@@ -5,6 +5,7 @@ using FlameRestaurant.Domain.Models.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -85,7 +86,10 @@ namespace FlameRestaurant.Domain.Business.BookModule
                     Name = product2.Name,
                     Price = product2.Price,
                     Total = basketItem.Quantity * product2.Price,
-                    Summary = await db.Basket.Include(b => b.Product).SumAsync(b => b.Quantity * b.Product.Price, cancellationToken)
+                    Summary = await db.Basket
+                    .Include(b => b.Product)
+                    .Where(b => b.UserId == userId)
+                    .SumAsync(b => b.Quantity * b.Product.Price, cancellationToken)
                 };
 
                 return response2;

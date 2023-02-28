@@ -60,7 +60,7 @@ namespace FlameRestaurant.WebUI.AppCode.TagHelpers
 
             output.Attributes.Add("class", $"rate {additionalClass}");
 
-            output.Content.SetHtmlContent(@$"<li data-rate='1' data-book-id='{this.ProductId}'></li>
+            output.Content.SetHtmlContent(@$"<li data-rate='1' data-product-id='{this.ProductId}'></li>
         <li data-rate='2' data-product-id='{this.ProductId}'></li>
         <li data-rate='3' data-product-id='{this.ProductId}'></li>
         <li data-rate='4' data-product-id='{this.ProductId}'></li>

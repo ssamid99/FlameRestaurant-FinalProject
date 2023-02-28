@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Product>
+
+@foreach (var item in Model)
+{
+    <div class="row">
+        <div class="wishlist-book-wrp">
+            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1">
+                <div class="wishlist-gen wishlist-remove-btn">
+                    <a onclick="removeFromFav(@item.Id,event)">
+                        <i class="fa fa-regular fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">
+                <div class="wishlist-gen wishlist-img-wrp">
+                    <a href="#">
+                        <img src="~/uploads/images/@item.ImagePath" alt="cart-image" />
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
+                <div class="wishlist-name-wrp">
+                    <a class="wishlist-name"
+               asp-controller="products"
+               asp-action="details"
+               asp-route-id="@item.Id">
+                    @item.Name
+                </a>
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 text-center">
+                <span class="wishlist-price amount">@item.Price</span>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 text-center">
+                <span class="wishlist-stock">in stock</span>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 text-center">
+                <a class="wislisht-basket tg-btn-custom tg-active tg-btn-lg" onclick="addToBasket(event)" data-product-id="@item.Id">Add to basket</a>
+            </div>
+        </div>
+    </div>
+}
