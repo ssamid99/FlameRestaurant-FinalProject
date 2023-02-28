@@ -1,0 +1,42 @@
+﻿@model PagedViewModel<Product>
+
+@foreach (var item in Model.Items)
+{
+    <tr>
+        <td class="image-cell">
+            @if (!string.IsNullOrWhiteSpace(item.ImagePath))
+            {
+                <img style="object-fit: contain;" src="~/uploads/images/@item.ImagePath" />
+            }
+        </td>
+        <td class="ellipse">
+            @item.Name
+        </td>
+        <td class="ellipse">
+            @item.StockKeepingUnit
+        </td>
+        <td>
+            @item.Price
+        </td>
+        <td class="operations">
+            @if (User.HasAccess("admin.products.edit"))
+            {
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            }
+            @if (User.HasAccess("admin.products.details"))
+            {
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">
+                    <i class="fa fa-eye"></i>
+                </a>
+            }
+            @if (User.HasAccess("admin.products.delete"))
+            {
+                <a class="btn btn-sm btn-danger" onclick="removeEntity(@item.Id,'@item.Name')">
+                    <i class="fa fa-trash"></i>
+                </a>
+            }
+        </td>
+    </tr>
+}

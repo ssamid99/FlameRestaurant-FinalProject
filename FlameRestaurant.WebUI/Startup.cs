@@ -5,6 +5,7 @@ using FlameRestaurant.Domain.AppCode.Providers;
 using FlameRestaurant.Domain.Models.DbContexts;
 using FlameRestaurant.Domain.Models.Entities.Membership;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +47,7 @@ namespace FlameRestaurant.WebUI
                 cfg.Filters.Add(new AuthorizeFilter(policy));
                 cfg.ModelBinderProviders.Insert(0, new BooleanBinderProvider());
             });
+            services.AddFluentValidationAutoValidation();
             services.AddDbContext<FlameRestaurantDbContext>(cfg =>
             {
                 cfg.UseSqlServer(configuration["ConnectionStrings:cString"]);

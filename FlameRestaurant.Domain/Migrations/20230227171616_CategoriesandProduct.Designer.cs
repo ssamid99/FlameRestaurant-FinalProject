@@ -4,14 +4,16 @@ using FlameRestaurant.Domain.Models.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FlameRestaurant.Domain.Migrations
 {
     [DbContext(typeof(FlameRestaurantDbContext))]
-    partial class FlameRestaurantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227171616_CategoriesandProduct")]
+    partial class CategoriesandProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -498,44 +500,6 @@ namespace FlameRestaurant.Domain.Migrations
                     b.ToTable("ProductRates");
                 });
 
-            modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.ProductTagItem", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.HasKey("ProductId", "TagId");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("DeletedByUserId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ProductTagCloud");
-                });
-
             modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.Reservation", b =>
                 {
                     b.Property<int>("Id")
@@ -578,40 +542,6 @@ namespace FlameRestaurant.Domain.Migrations
                     b.HasIndex("Id");
 
                     b.ToTable("Reservations");
-                });
-
-            modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CreatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedByUserId");
-
-                    b.HasIndex("DeletedByUserId");
-
-                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.Team", b =>
@@ -841,53 +771,7 @@ namespace FlameRestaurant.Domain.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.ProductTagItem", b =>
-                {
-                    b.HasOne("FlameRestaurant.Domain.Models.Entities.Membership.FlameRestaurantUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId");
-
-                    b.HasOne("FlameRestaurant.Domain.Models.Entities.Membership.FlameRestaurantUser", "DeletedByUser")
-                        .WithMany()
-                        .HasForeignKey("DeletedByUserId");
-
-                    b.HasOne("FlameRestaurant.Domain.Models.Entities.Product", "Product")
-                        .WithMany("TagCloud")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FlameRestaurant.Domain.Models.Entities.Tag", "Tag")
-                        .WithMany("TagCloud")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("DeletedByUser");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Tag");
-                });
-
             modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.Reservation", b =>
-                {
-                    b.HasOne("FlameRestaurant.Domain.Models.Entities.Membership.FlameRestaurantUser", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedByUserId");
-
-                    b.HasOne("FlameRestaurant.Domain.Models.Entities.Membership.FlameRestaurantUser", "DeletedByUser")
-                        .WithMany()
-                        .HasForeignKey("DeletedByUserId");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("DeletedByUser");
-                });
-
-            modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.Tag", b =>
                 {
                     b.HasOne("FlameRestaurant.Domain.Models.Entities.Membership.FlameRestaurantUser", "CreatedByUser")
                         .WithMany()
@@ -930,16 +814,6 @@ namespace FlameRestaurant.Domain.Migrations
             modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.Category", b =>
                 {
                     b.Navigation("Children");
-                });
-
-            modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.Product", b =>
-                {
-                    b.Navigation("TagCloud");
-                });
-
-            modelBuilder.Entity("FlameRestaurant.Domain.Models.Entities.Tag", b =>
-                {
-                    b.Navigation("TagCloud");
                 });
 #pragma warning restore 612, 618
         }

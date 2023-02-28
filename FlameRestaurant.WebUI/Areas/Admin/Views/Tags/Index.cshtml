@@ -1,0 +1,123 @@
+﻿@model PagedViewModel<Tag>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-lg-8">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4>Tags</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="page-header-breadcrumb">
+                <ul class="breadcrumb-title">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Dashboard" asp-action="index">
+                            <i class="feather icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>Tags</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="card">
+        <div class="card-block table-border-style">
+            <div class="table-responsive">
+                <table class="table table-imaged">
+                    <thead>
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                CreatedDate
+                            </th>
+                            <th class="operations">
+                                @if (User.HasAccess("admin.tags.create"))
+                                {
+                                    <a asp-action="Create" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                }
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="dynamic-content">
+                        <partial name="_TagListBody" model="@Model" />
+                    </tbody>
+                </table>
+            </div>
+
+            @Model.GetPager(Url,"Index","Admin")
+        </div>
+    </div>
+    @Html.AntiForgeryToken()
+</div>
+
+@section addcss{
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
+
+}
+
+    @section addjs{
+    <script>
+        function removeEntity(id, name) {
+            swal(`Əminsiniz ki, '${name}' silinsin?`, {
+                title: "Diqqət!",
+                text: `Əminsiniz ki, '${name}' silinsin?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["Xeyr", "Bəli"]
+            })
+                .then((value) => {
+
+                    if (value == true) {
+
+                        let vToken = $("[name=__RequestVerificationToken]").val();
+
+                        let formData = new FormData();
+
+                        formData.set("__RequestVerificationToken", vToken);
+                        formData.set("id", id);
+
+                        $.ajax({
+                            url: `@Url.Action("Delete")`,
+                            type: "POST",
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                console.log(response);
+
+                                if (response.error == true) {
+                                    toastr.error(response.message, "Xeta!");
+                                    return;
+                                }
+
+                                location.reload();
+                            },
+                            error: function (errorResponse) {
+                                console.error(errorResponse);
+                            }
+                        });
+                    }
+                });
+        }
+    </script>
+}
+

@@ -1,0 +1,36 @@
+﻿@model PagedViewModel<Tag>
+
+@foreach (var item in Model.Items)
+{
+    <tr>
+        <td>
+
+        </td>
+        <td class="ellipse">
+            @item.Text
+        </td>
+        <td class="ellipse">
+            @item.CreatedDate
+        </td>
+        <td class="operations">
+            @if (User.HasAccess("admin.tags.edit"))
+            {
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            }
+            @if (User.HasAccess("admin.tags.details"))
+            {
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">
+                    <i class="fa fa-eye"></i>
+                </a>
+            }
+            @if (User.HasAccess("admin.tags.delete"))
+            {
+                <a class="btn btn-sm btn-danger" onclick="removeEntity(@item.Id,'@item.Text')">
+                    <i class="fa fa-trash"></i>
+                </a>
+            }
+        </td>
+    </tr>
+}

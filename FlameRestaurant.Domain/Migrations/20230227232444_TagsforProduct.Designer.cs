@@ -4,14 +4,16 @@ using FlameRestaurant.Domain.Models.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FlameRestaurant.Domain.Migrations
 {
     [DbContext(typeof(FlameRestaurantDbContext))]
-    partial class FlameRestaurantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227232444_TagsforProduct")]
+    partial class TagsforProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

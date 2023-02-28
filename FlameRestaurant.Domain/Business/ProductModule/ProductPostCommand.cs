@@ -1,4 +1,5 @@
 ﻿using FlameRestaurant.Application.AppCode.Extensions;
+using FlameRestaurant.Domain.Migrations;
 using FlameRestaurant.Domain.Models.DbContexts;
 using FlameRestaurant.Domain.Models.Entities;
 using MediatR;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +26,7 @@ namespace FlameRestaurant.Domain.Business.ProductModule
         public string Description { get; set; }
         public string ReceipeDescription { get; set; }
         public int CategoryId { get; set; }
+        public int[] TagIds { get; set; }
 
         public class ProductPostCommandHandler : IRequestHandler<ProductPostCommand, Product>
         {
@@ -45,6 +48,7 @@ namespace FlameRestaurant.Domain.Business.ProductModule
                     return null;
 
                 var product = new Product();
+                product.TagCloud = new List<ProductTagItem>();
                 product.CreatedByUserId = ctx.GetCurrentUserId();
                 product.Name = request.Name;
                 product.StockKeepingUnit = request.StockKeepingUnit;
@@ -77,6 +81,16 @@ namespace FlameRestaurant.Domain.Business.ProductModule
                 }
 
                 product.ImagePath = request.ImagePath;
+
+                if (request.TagIds != null)
+                {
+                    foreach (var exceptedId in request.TagIds)
+                    {
+                        var tagItem = new ProductTagItem();
+                        tagItem.TagId = exceptedId;
+                        product.TagCloud.Add(tagItem);
+                    }
+                }
 
                 await db.Products.AddAsync(product, cancellationToken);
                 await db.SaveChangesAsync(cancellationToken);

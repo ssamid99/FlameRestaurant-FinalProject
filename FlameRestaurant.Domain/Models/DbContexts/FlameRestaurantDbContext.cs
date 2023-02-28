@@ -21,7 +21,10 @@ namespace FlameRestaurant.Domain.Models.DbContexts
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductRate> ProductRates { get; set; }
-
+        public DbSet<ProductTagItem> ProductTagCloud { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

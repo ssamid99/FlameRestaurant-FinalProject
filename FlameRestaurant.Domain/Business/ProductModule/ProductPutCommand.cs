@@ -1,6 +1,7 @@
 ﻿using FlameRestaurant.Application.AppCode.Extensions;
 using FlameRestaurant.Application.AppCode.Extenstions;
 using FlameRestaurant.Application.AppCode.Infrastructure;
+using FlameRestaurant.Domain.Migrations;
 using FlameRestaurant.Domain.Models.DataContexts;
 using FlameRestaurant.Domain.Models.DbContexts;
 using FlameRestaurant.Domain.Models.Entities;
@@ -29,7 +30,7 @@ namespace FlameRestaurant.Domain.Business.ProductModule
         public string Description { get; set; }
         public string ReceipeDescription { get; set; }
         public int CategoryId { get; set; }
-
+        public int[] TagIds { get; set; }
         public class BookEditCommandHandler : IRequestHandler<ProductPutCommand, JsonResponse>
         {
             private readonly FlameRestaurantDbContext db;
@@ -46,6 +47,7 @@ namespace FlameRestaurant.Domain.Business.ProductModule
             {
 
                 var product = await db.Products
+                    .Include(p=>p.TagCloud)
                     .FirstOrDefaultAsync(bp => bp.Id == request.Id && bp.DeletedDate == null);
                 if (product == null)
                 {
@@ -76,8 +78,52 @@ namespace FlameRestaurant.Domain.Business.ProductModule
                 env.ArchiveImages(product.ImagePath);
 
                 product.ImagePath = request.ImagePath;
-
             end:
+
+                if (request.TagIds == null && product.TagCloud.Any())
+                {
+                    foreach (var tagItem in product.TagCloud)
+                    {
+                        db.ProductTagCloud.Remove(tagItem);
+                    }
+                }
+                else if (request.TagIds != null)
+                {
+                    #region databasede evvel olan indi olmayan tagler-silinmesini istediklerimiz
+                    
+                    var exceptedIds = db.ProductTagCloud.Where(tc => tc.ProductId == product.Id).Select(tc => tc.TagId).ToList()
+                        .Except(request.TagIds).ToArray();
+
+                    if (exceptedIds.Length > 0)
+                    {
+                        foreach (var exceptedId in exceptedIds)
+                        {
+                            var tagItem = db.ProductTagCloud.FirstOrDefault(tc => tc.TagId == exceptedId
+                            && tc.ProductId == product.Id);
+
+                            if (tagItem != null)
+                            {
+                                db.ProductTagCloud.Remove(tagItem);
+                            }
+                        }
+                    }
+                    #endregion
+
+                    #region evvel databasede olmayan ama indi elave olunmasini istediklerimiz
+                    var newExceptedIds = request.TagIds.Except(db.ProductTagCloud.Where(tc => tc.ProductId == product.Id).Select(tc => tc.TagId).ToList()).ToArray();
+
+                    if (newExceptedIds.Length > 0)
+                    {
+                        foreach (var exceptedId in newExceptedIds)
+                        {
+                            var tagItem = new ProductTagItem();
+                            tagItem.TagId = exceptedId;
+                            tagItem.ProductId = product.Id;
+                            await db.ProductTagCloud.AddAsync(tagItem);
+                        }
+                    }
+                    #endregion
+                }
 
                 await db.SaveChangesAsync(cancellationToken);
 

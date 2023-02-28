@@ -24,6 +24,8 @@ namespace FlameRestaurant.Domain.Business.ProductModule
                 var book = await db.Products
                     .Include(b => b.Category)
                     .ThenInclude(bc=>bc.Parent)
+                    .Include(bp => bp.TagCloud)
+                    .ThenInclude(bp => bp.Tag)
                     .FirstOrDefaultAsync(p => p.Id == request.Id);
 
                 return book;

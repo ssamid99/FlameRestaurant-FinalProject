@@ -1,0 +1,77 @@
+﻿@model Tag
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="page-header">
+    <div class="row align-items-end">
+        <div class="col-lg-8">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4>Details</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="page-header-breadcrumb">
+                <ul class="breadcrumb-title">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="index">
+                            <i class="feather icon-home"></i>
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-action="index">Tags</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <span>@Model.Text</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="card">
+        <div class="card-block">
+            <div>
+                <div class="form-group row">
+                    <label asp-for="Text" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <p class="form-control">
+                            @Model.Text
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="CreatedDate" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <p class="form-control">
+                            @Model.CreatedDate
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="CreatedByUserId" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <div>
+                            @Html.Raw(Model.CreatedByUser.Name) @Html.Raw(Model.CreatedByUser.Surname)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="col-12 d-flex justify-content-end">
+                        @if (User.HasAccess("admin.tags.edit"))
+                        {
+                            <a asp-action="edit" asp-route-id="@Model.Id" class="btn btn-warning mr-2">Edit</a>
+                        }
+                        <a asp-action="index" class="btn btn-info">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
