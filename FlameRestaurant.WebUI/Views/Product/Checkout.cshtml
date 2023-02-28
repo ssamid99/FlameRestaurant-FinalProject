@@ -1,0 +1,321 @@
+﻿@model OrderViewModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+<div class="tg-sectionspace tg-haslayout">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="tg-sectionhead tg-sectionhead--checkout">
+                    <h2 class="tg-sectionhead__title">
+                        Poduct
+                    </h2>
+                    @*@await Component.InvokeAsync("OrderInfo");*@
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                        <div class="your-order mb-30 pt-30 pr-40 pb-45 pl-40 mt-15">
+                            <h4 class="pb-10 mb-20 border-b-light-gray3">Your order</h4>
+                            <div class="your-order-table table-responsive">
+                                <table class="width100">
+                                    <tbody>
+                                        @foreach (var item in Model.BasketProducts)
+                                        {
+                                            <tr class="product-item-order product-item-order-@item.ProductId">
+                                                <td class="product-thumb">
+                                                    <a target="_blank" asp-action="details" asp-controller="shop" asp-route-id="@item.ProductId">
+                                                        <img src="~/uploads/images/@item.Product.ImagePath" alt="img" />
+                                                    </a>
+                                                </td>
+                                                <td class="product-order-inner">
+                                                    <h5 class="product-name">
+                                                        <a class="order-link-name" target="_blank" asp-action="details" asp-controller="shop" asp-route-id="@item.ProductId">@item.Product.Name</a>
+                                                    </h5>
+                                                    <div class="price">
+                                                        @item.Product.Price.ToString("0.00₼")
+                                                        <span class="count">x @item.Quantity</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="order-total">
+                                            <th>Order Total : </th>
+                                            <td>
+                                                <strong><span class="amount text-danger"><b> @Model.BasketProducts.Sum(p => (p.Product.Price * p.Quantity)) ₼</b></span></strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+
+                            <div class="payment-method mt-40">
+                                <div class="accordion" id="accordionExample">
+                                    <div class="card rounded-0 mb-10 white-bg">
+                                        <div class="card-header bg-white border-b-light-gray"
+                                             id="headingOne">
+                                            <h6 class="mb-0">
+                                                <button class="btn-link border-0 text-uppercase"
+                                                        type="button" data-toggle="collapse"
+                                                        data-target="#collapseOne" aria-expanded="true"
+                                                        aria-controls="collapseOne">
+                                                    Direct Bank Transfer
+                                                </button>
+                                            </h6>
+                                        </div>
+
+                                        <div id="collapseOne" class="collapse show"
+                                             aria-labelledby="headingOne"
+                                             data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <P class="mb-0">
+                                                    Make your payment directly into our
+                                                    bank account. Please use your Order ID as the
+                                                    payment reference. Your order won’t be shipped until
+                                                    the funds have cleared in our account.
+                                                </P>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card rounded-0 mb-10 white-bg">
+                                        <div class="card-header bg-white border-b-light-gray"
+                                             id="headingTwo">
+                                            <h6 class="mb-0">
+                                                <button class="btn-link collapsed border-0 text-uppercase" type="button" data-toggle="collapse"
+                                                        data-target="#collapseTwo" aria-expanded="false"
+                                                        aria-controls="collapseTwo">
+                                                    Cheque Payment
+                                                </button>
+                                            </h6>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse"
+                                             aria-labelledby="headingTwo"
+                                             data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="card-body">
+                                                    <P class="mb-0">
+                                                        Please send your cheque to Store
+                                                        Name, Store Street, Store Town, StoreState /
+                                                        County, StorePostcode.
+                                                    </P>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card rounded-0 mb-10 white-bg">
+                                        <div class="card-header bg-white border-b-light-gray"
+                                             id="headingThree">
+                                            <h6 class="mb-0">
+                                                <button class="btn-link collapsed border-0 text-uppercase" type="button" data-toggle="collapse"
+                                                        data-target="#collapseThree" aria-expanded="false"
+                                                        aria-controls="collapseThree">
+                                                    PayPal
+                                                </button>
+                                            </h6>
+                                        </div>
+                                        <div id="collapseThree" class="collapse"
+                                             aria-labelledby="headingThree"
+                                             data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <P class="mb-0">
+                                                    Pay via PayPal; you can pay with your
+                                                    credit card if you don’t have a
+                                                    PayPal account.
+                                                </P>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <form id="checkout-form" class="tg-checkout" novalidate>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-25">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="tg-sectionhead tg-sectionhead--checkout">
+                                    <h2 class="tg-sectionhead__title">
+                                        <i class="fas fa-shipping-fast"></i>
+                                        Shipping Details
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-inputs">
+                                    <input asp-for="@Model.OrderDetails.Firstname" type="text" placeholder="Firstname*">
+                                    <span asp-validation-for="@Model.OrderDetails.Firstname" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-inputs">
+                                    <input asp-for="@Model.OrderDetails.Lastname" type="text" placeholder="Lastname*">
+                                    <span asp-validation-for="@Model.OrderDetails.Lastname" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-inputs">
+                                    <input asp-for="@Model.OrderDetails.Address" type="text" placeholder="Address*">
+                                    <span asp-validation-for="@Model.OrderDetails.Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-inputs">
+                                    <input asp-for="@Model.OrderDetails.PhoneNumber" class="mt-20" type="text" placeholder="Telephone number*">
+                                    <span asp-validation-for="@Model.OrderDetails.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-inputs">
+                                    <textarea asp-for="@Model.OrderDetails.Notes" class="mt-20" type="text" placeholder="Your notes"></textarea>
+                                    <span asp-validation-for="@Model.OrderDetails.Notes" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-25">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="tg-sectionhead tg-sectionhead--checkout">
+                                    <h2 class="tg-sectionhead__title">
+                                        <i class="far fa-credit-card"></i> Payment Information
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-inputs">
+                                    <input type="text" name="card" placeholder="Your card number*">
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-inputs">
+                                    <input class="mt-20" type="text" name="expire" placeholder="Expire date*">
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-inputs">
+                                    <input class="mt-20" type="text" name="security" placeholder="CCV*">
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="checkout-btns">
+                                    <button class="custom-buttons custom-buttons--back">Back to cart</button>
+                                    <button type="submit" class="custom-buttons custom-buttons--purchase">Purchase</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <input asp-for="OrderDetails.TotalPrice" value="@Model.BasketProducts.Sum(p => (p.Product.Price * p.Quantity))" hidden />
+                <input asp-for="OrderDetails.CreatedByUserId" value="@User.GetCurrentUserId()" hidden />
+                @for (int i = 0; i < Model.BasketProducts.Count(); i++)
+                {
+                    <input hidden name="productIds" value="@Model.BasketProducts.ElementAt(i).ProductId">
+                    <input hidden name="quantities" value="@Model.BasketProducts.ElementAt(i).Quantity">
+                }
+            </form>
+        </div>
+    </div>
+</div>
+
+@section addjs{
+    <script src="~/lib/sweetalert/sweetalert.min.js"></script>
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
+    <script src="~/lib/toastr.js/toastr.customize.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $("#checkout-form").submit(function(ev) {
+                ev.preventDefault();
+
+                let fd = new FormData(ev.currentTarget); // form => formData
+
+                $.ajax({
+                    url: '@Url.Action("Checkout")',
+                    type: "POST",
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+
+                        $("#checkout-form span.text-danger").remove();
+                        $("#checkout-form input[Name]").removeClass("novalidated");
+                        //console.log(response, "SUCCESS");
+
+                        if (response.error == true) {
+
+                            toastr.error(response.message);
+                            showError(response.state);
+
+                            return;
+                        }
+
+                        swal({
+                            title: "Success!",
+                            text: "Your order has been completed, you will receive message in few days",
+                            icon: "success",
+                            button: "Ok",
+                        });
+
+                        ev.currentTarget.reset();
+                    },
+                    error: function(errResponse) {
+                        console.log(errResponse, "ERROR");
+                    }
+
+                })
+
+
+            })
+        });
+
+        function showError(state) {
+
+            state.forEach(item => {
+                //console.log(item)
+
+                let errorInput = $(`#checkout-form input[name='${item.fieldName}']`);
+                let errorSpan = $("<span/>", {
+                    class: 'text-danger validation-error',
+                    html: item.message
+                });
+
+                $(errorInput.parent()).append(errorSpan);
+                $(errorInput).addClass("novalidated")
+            });
+        }
+    </script>
+}
+

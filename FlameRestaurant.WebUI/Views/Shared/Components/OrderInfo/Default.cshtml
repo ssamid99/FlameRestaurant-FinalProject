@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Basket>
+
+<div>
+    <div class="col-md-4 col-sm-5 col-12">
+        <div class="cart_totals">
+            <h2>Cart Totals</h2>
+            <br />
+            <table>
+                <tbody>
+                    @*   <tr class="cart-subtotal">
+                    <th>Subtotal</th>
+                    <td><span class="amount">$215.00</span></td>
+                    </tr>*@
+                    <tr class="order-total">
+                        <th>Total</th>
+                        <td>
+                            <strong><span class="amount" id="summary">@Model.Sum(m=>m.Quantity * m.Product.Price).ToString("0.00₼")</span></strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

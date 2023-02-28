@@ -16,18 +16,18 @@ namespace FlameRestaurant.WebUI.AppCode.ViewComponents
             this.db = db;
         }
 
-        //public async Task<IViewComponentResult> InvokeAsync(string viewName)
-        //{
-        //    var data = await db.Basket
-        //        .Include(d => d.Book)
-        //        .ToListAsync();
+        public async Task<IViewComponentResult> InvokeAsync(string viewName)
+        {
+            var data = await db.Basket
+                .Include(d => d.Product)
+                .ToListAsync();
 
-        //    if (data == null)
-        //    {
-        //        return null;
-        //    }
+            if (data == null)
+            {
+                return null;
+            }
 
-        //    return View(await Task.FromResult(data));
-        //}
+            return View(await Task.FromResult(data));
+        }
     }
 }

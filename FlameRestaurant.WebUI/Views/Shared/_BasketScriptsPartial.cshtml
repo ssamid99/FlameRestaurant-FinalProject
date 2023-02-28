@@ -1,0 +1,98 @@
+﻿<script class="removeable" src="~/lib/sweetalert/sweetalert.min.js"></script>
+<script class="removeable" src="~/lib/toastr.js/toastr.min.js"></script>
+<script class="removeable" src="~/lib/toastr.js/toastr.customize.js"></script>
+<script>
+    function removeFromBasket(element, name) {
+
+        swal(`Əminsiniz ki '${name}' silinsin?`, {
+            title: "Diqqət!",
+            text: `Əminsiniz ki '${name}' silinsin?`,
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            buttons: ["Xeyr", "Bəli"],
+        })
+            .then((value) => {
+
+                if (value == true) {
+                    const elementData = $(element).data();
+                    console.log(elementData);
+
+                    $.ajax({
+                        url: `@Url.Action("RemoveFromBasket","Products")`,
+                        type: 'POST',
+                        data: elementData,
+                        contentType: 'application/x-www-form-urlencoded',
+                        success: function(response) {
+                            if (response.error == false) {
+                                const removeTarget = $(element).attr('aria-remove-target');
+                                if (removeTarget != undefined) {
+                                    $(removeTarget).remove();
+                                }
+
+                                if (response.value?.count == null) {
+                                    $('.cart-counter').text('');
+                                }
+                                else {
+                                    $('.cart-counter').text(response.value.count);   //₼
+                                }
+
+                                toastr.success(response.message, 'Success');
+                                return;
+                            }
+
+                            toastr.error(response.message, 'Error');
+                        },
+                        error: function(response, status, xhr) {
+                            console.log(response, status, xhr);
+                        }
+                    });
+                }
+            });
+
+
+
+    }
+
+    function changeQuantity(event, element) {
+
+        if ($.processId != undefined) {
+            clearTimeout($.processId);
+            $.processId = undefined;
+        }
+
+        if (element.value < 1) {
+            console.log('Error!', element.value);
+            return false;
+        }
+
+        $.processId = setTimeout(function() {
+
+            const elementData = $(element).data();
+            elementData.Quantity = element.value;
+
+            $.ajax({
+                url: `@Url.Action("ChangeBasketQuantity","Products")`,
+                type: 'POST',
+                data: elementData,
+                contentType: 'application/x-www-form-urlencoded',
+                success: function(response) {
+                    if (response.error == false) {
+
+                        $(element).closest('tr').find('.amount').text(`${response.value.price}₼`);
+                        $(element).closest('tr').find('.product-subtotal').text(`${response.value.total}₼`);
+                        $('#summary').text(`${response.value.summary}₼`);
+                        toastr.success(response.message, 'Success');
+                        return;
+                    }
+
+                    toastr.error(response.message, 'Error');
+                },
+                error: function(response, status, xhr) {
+                    console.log(response, status, xhr);
+                }
+            });
+
+        }, 700);
+    }
+</script>

@@ -1,0 +1,109 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Wishlist";
+}
+
+<div class="tg-innerbanner tg-haslayout tg-parallax tg-bginnerbanner"
+     data-z-index="-100"
+     data-appear-top-offset="600"
+     data-parallax="scroll"
+     data-image-src=@Url.Content("~/assets/images/parallax/bgparallax-07.jpg")>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="tg-innerbannercontent">
+                    <h1>Wishlist</h1>
+                    <ol class="tg-breadcrumb">
+                        <li><a asp-controller="home" asp-action="index">home</a></li>
+                        <li class="tg-active">Wishlist</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cart-main-area wish-list pb-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12 col-12">
+                @if (Model != null && Model.Any())
+                {
+
+                    <form method="post">
+                        <div class="table-content table-responsive">
+                            <div id="dynamic-content" style="margin: 10rem 0">
+                                <partial name="_WishlistBody" model="Model"></partial>
+                            </div>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <p>Empty wishlist :(</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section addcss{
+    <link rel="stylesheet" href="~/libs/toastr.js/toastr.min.css" />
+
+    <style>
+        
+
+    </style>
+
+}
+    @section addjs{
+    <script class="removeable" src="~/lib/toastr.js/toastr.min.js"></script>
+    <script class="removeable" src="~/lib/toastr.js/toastr.customize.js"></script>
+    <script>
+        function removeFromFav(productId, e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '',
+                type: 'post',
+                beforeSend: function(xhr) {
+                    const favorites = ($.cookie('favorites') || '').split(',').filter(item => item.length > 0);
+                    const refreshFavorites = favorites.filter(item => item != productId);
+                    $.cookie('favorites', refreshFavorites.toString(), { path: '/', expires: 7 });
+                },
+                success: function(response) {
+                    $('#dynamic-content').html(response);
+                },
+                error: function(response) {
+                }
+            });
+        }
+
+        function addToBasket(e) {
+            e.preventDefault();
+
+            const elementData = $(e.currentTarget).data();
+
+            $.ajax({
+                url: `@Url.Action("Basket","Products")`,
+                type: 'POST',
+                data: elementData,
+                contentType: 'application/x-www-form-urlencoded',
+                success: function(response) {
+                    if (response.error == false) {
+                        $(e.target).closest('tr').remove();
+                        toastr.success(response.message, 'Success');
+                        return;
+                    }
+
+
+                    toastr.error(response.message, 'Error');
+                },
+                error: function(response, status, xhr) {
+                    console.log(response, status, xhr);
+                }
+            });
+        }
+    </script>
+}
