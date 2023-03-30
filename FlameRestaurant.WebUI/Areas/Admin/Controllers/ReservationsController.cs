@@ -133,5 +133,22 @@ namespace FlameRestaurant.WebUI.Areas.Admin.Controllers
             return View(command);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize("admin.reservations.delete")]
+        public async Task<IActionResult> Delete(ReservationRemoveCommand command)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await mediator.Send(command);
+
+                if (response != null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            return View(command);
+        }
+
     }
 }

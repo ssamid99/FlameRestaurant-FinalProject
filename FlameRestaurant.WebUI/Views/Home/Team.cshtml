@@ -1,0 +1,44 @@
+﻿@model PagedViewModel<Team>
+@{
+    ViewData["Title"] = "Team";
+}
+
+<div class="page-header">
+            <div class="page-header-content bg_image_header jarallax">
+                <div class="container">
+                    <h1 class="heading">Our Team</h1>
+                </div>
+            </div>
+        </div>
+			
+		<div class="main-wrapper">
+			<div class="team light_team">
+				<div class="container">
+					<div class="row">
+						@foreach(var item in Model.Items){
+						<div class="col-lg-3 col-md-6">
+							<div class="team_member">
+								<div class="teambox">
+									<img src="~/uploads/images/@item.ImagePath" alt="">
+									<div class="teambox_inner">
+										<div class="team_social">
+											<ul>
+												<li class="instagram"><a href="#"><i class="ion-social-instagram-outline"></i></a></li>
+												<li class="twitter"><a href="#"><i class="ion-social-twitter"></i></a></li>
+												<li class="facebook"><a href="#"><i class="ion-social-facebook"></i></a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="teambox_intro">
+									<h5>@item.Name @item.Surname</h5>
+									<h6>      </h6>
+									<p>@Html.Raw(item.Text)</p>
+								</div>
+							</div>
+						</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div> 

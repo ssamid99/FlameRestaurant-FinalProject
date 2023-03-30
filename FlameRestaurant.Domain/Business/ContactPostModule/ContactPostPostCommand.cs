@@ -9,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using FlameRestaurant.Application.AppCode.Extensions;
+using Microsoft.AspNetCore.Identity;
+using FlameRestaurant.Domain.Models.FormData;
 
 namespace FlameRestaurant.Domain.Business.ContactPostModule
 {
@@ -17,9 +19,6 @@ namespace FlameRestaurant.Domain.Business.ContactPostModule
         public string Name { get; set; }
         public string Email { get; set; }
         public string Message { get; set; }
-        public string Answer { get; set; }
-        public DateTime? AnswerDate { get; set; }
-        public int? AnsweredbyId { get; set; }
         public class ContactPostPostCommandHandler : IRequestHandler<ContactPostPostCommand, ContactPost>
         {
             private readonly FlameRestaurantDbContext db;
@@ -36,7 +35,6 @@ namespace FlameRestaurant.Domain.Business.ContactPostModule
                 data.Name = request.Name;
                 data.Email = request.Email;
                 data.Message = request.Message;
-                data.CreatedByUserId = ctx.GetCurrentUserId();
                 await db.ContactPosts.AddAsync(data, cancellationToken);
                 await db.SaveChangesAsync(cancellationToken);
                 return data;

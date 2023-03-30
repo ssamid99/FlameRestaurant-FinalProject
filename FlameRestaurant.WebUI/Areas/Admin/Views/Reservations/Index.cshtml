@@ -60,13 +60,13 @@
                             <thead>
                                 <tr>
                                     <th>
+                                        
+                                    </th>
+                                    <th>
                                         Qonaq Adı
                                     </th>
                                     <th>
                                         Rezervasiya Tarixi
-                                    </th>
-                                    <th>
-                                        Rezervasiya Saatı
                                     </th>
                                     <th class="operations">
                                     @if (User.HasAccess("admin.reservations.create"))
@@ -76,7 +76,7 @@
                                         </a>
 
                                     }
-                                    </th>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,20 +84,27 @@
                             {
                                 <tr>
                                     <td class="ellipse">
+                                        @item.Id
+                                    </td>
+                                    <td class="ellipse">
                                         @item.Name
                                     </td>
                                     <td class="ellipse">
                                         @item.Date
                                     </td>
                                     <td>
-                                    @if (User.HasAccess("admin.reservations.edit"))
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="fa-solid fa-pencil"></i></a>
-                                    }
-                                    @if (User.HasAccess("admin.reservations.details"))
-                                    {
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="fa-solid fa-eye"></i></a>
-                                    }
+                                        @if (User.HasAccess("admin.reservations.edit"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="fa-solid fa-pencil"></i></a>
+                                        }
+                                        @if (User.HasAccess("admin.reservations.details"))
+                                        {
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="fa-solid fa-eye"></i></a>
+                                        }
+                                        @if (User.HasAccess("admin.reservations.delete"))
+                                        {
+                                            <a class="btn btn-sm btn-danger" onclick="removeEntity(@item.Id, '@item.Name')"><i class="fa-solid fa-trash-can"></i></a>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -111,4 +118,45 @@
     @Html.AntiForgeryToken()
 </div>
 
+@section addjs{
 
+    <script class="removeable">
+        function removeEntity(id, name) {
+            swal(`Are you sure you want to delete ${name}?`, {
+                title: "Diqqet!",
+                text: `${name} adına olan reservasiyani silmək istədiyinizdən əminsiniz?`,
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["No", "Yes"]
+            })
+                .then((value) => {
+                    if (value == true) {
+                        let vToken = $('[name=__RequestVerificationToken]').val();
+                        let formData = new FormData();
+                        formData.set('__RequestVerificationToken', vToken);
+                        formData.set('id', id);
+                        $.ajax({
+                            url: `@Url.Action("Delete")`,
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                console.log(response)
+                                if (response.error == true) {
+                                    toaster.error(response.message, "Xəta");
+                                    return;
+                                }
+                                location.reload();
+                            },
+                            error: function (errorResponse) {
+                                console.error(errorResponse);
+                            }
+                        });
+                    }
+                });
+        }
+
+    </script>
+    }

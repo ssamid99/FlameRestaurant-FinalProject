@@ -1,0 +1,19 @@
+﻿@model IEnumerable<BlogPost>
+
+<div class="row">
+    @foreach(var item in Model)
+    {
+    <div class="col-lg-4 col-md-4">
+        <article class="blog_post">
+            <div class="post_img">
+                    <a asp-controller="blogposts" asp-action="details" asp-route-id="@item.Id" asp-route-slug="@item.Slug"><img src="~/uploads/images/@item.ImagePath" alt="blog"></a>
+            </div>
+            <div class="post_header">
+                <h5 class="post_title">
+                        <a asp-controller="blogposts" asp-action="details" asp-route-id="@item.Id" asp-route-slug="@item.Slug">@item.Title</a>
+                </h5>
+            </div>
+        </article>
+    </div>
+    }
+</div>

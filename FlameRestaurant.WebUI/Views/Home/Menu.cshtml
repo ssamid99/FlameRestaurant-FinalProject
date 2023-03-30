@@ -1,0 +1,88 @@
+﻿@model IEnumerable<Category>
+@{
+    ViewData["Title"] = "Menu";
+}
+
+<div class="page-header ">
+            <div class="page-header-content bg_image_header jarallax">
+                <div class="container">
+                    <h1 class="heading">Our Menu</h1>
+                </div>
+            </div>
+        </div>
+			
+		<div class="main-wrapper pt_0 pb_0">
+
+						@foreach(var category in Model){
+			<div class="section_sm">
+				<div class="container">
+					<div class="section_header sm_padding dark">
+						<img src="~/images/title_border.png" alt="">
+						<h2 class="section_title">@category.Name</h2>
+						<h6 class="section_sub_title">Find your favourite meal from the delicious options we have</h6>
+					</div>
+					
+					<div class="foodmenu_tab">
+                        <div  class="foodmenu_tab_container with_photo">
+                            <div class="row">
+								@foreach(var food in category.Products.Where(p=>p.DeletedDate == null)){
+								<div class="col-lg-6 col-md-6">
+									<div class="foodmenu_tab_content">
+										<div class="menu_serial"><img src="~/uploads/images/@food.ImagePath" alt="" class="fiximg"></div> 
+										<div class="menu_item">
+											<div class="menu_item_inner">
+												<div class="name">@food.Name</div>
+												<div class="line"></div>
+												<div class="price">$ @food.Price</div>
+											</div>
+											<p>Lorem ipsum dolor sit amet consecturer duis</p>
+										</div>
+									</div>
+								</div>  
+								}
+							</div>
+                        </div>
+					</div>
+				</div>
+			</div>
+		<div class="bgimage_section_divider bg_image_18"></div>
+			}
+			
+			<div class="banner_2">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-5">
+							<div class="banner_left">
+								<div class="section_header dark">
+									<h2 class="section_title">Safe food take out</h2>
+									<h6 class="section_sub_title">We are open for anu order Online</h6>
+									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit
+										tempor incididunt ut labore et dolore magna aliqua. Ut en
+										ad minim veniam.</p>
+								</div>
+								<div class="contact_info">
+									<div class="phone">
+										<img src="~/images/phone2.png" alt="phone">
+										<div><span>Call us to order online</span><br>+994-51-831-18-81</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<div class="banner_right">
+						<img src="~/images/bg/banner_bg2.jpg" alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+
+@section addcss{
+	<style>
+		.fiximg{
+			max-width : 60px;
+		}
+	</style>
+}

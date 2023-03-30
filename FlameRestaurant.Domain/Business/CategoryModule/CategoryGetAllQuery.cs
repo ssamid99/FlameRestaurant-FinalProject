@@ -24,6 +24,7 @@ namespace FlameRestaurant.Domain.Business.CategoryModule
             {
                 var data = await db.Categories
                 .Where(bp => bp.DeletedDate == null)
+                .Include(bp=>bp.Products)
                 .ToListAsync(cancellationToken);
 
                 return data;

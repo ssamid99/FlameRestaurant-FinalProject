@@ -13,5 +13,6 @@ namespace FlameRestaurant.Domain.Models.Entities
         public virtual Category Parent { get; set; }
         public virtual ICollection<Category> Children { get; set; }
         public string Name { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }

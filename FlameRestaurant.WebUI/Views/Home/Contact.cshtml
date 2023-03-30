@@ -1,0 +1,89 @@
+﻿@model ContactPostPostCommand
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<div class="page-header">
+            <div class="page-header-content bg_image_header jarallax">
+                <div class="container">
+                    <h1 class="heading">Contact Us</h1>
+                </div>
+            </div>
+        </div>
+			
+		<div class="main-wrapper">
+			<div class="contact">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-5">
+							<h3 class="sec_large_title">Visit any of Our Brunch & Have a great Culinary Experience</h3>
+						</div>
+						<div class="col-lg-7">
+							<div class="keepintouch">
+								<div class="communication">
+									<div class="info_body">
+										<h5>New York</h5>
+										<p>112/9 Madison Park, New York <br/>
+											flamerestaurant.ny@gmail.com<br/>
+											+33 123 456 789 (Flame)
+										</p>
+									</div>
+								</div>
+								<div class="communication">
+									<div class="info_body">
+										<h5>California</h5>
+										<p>112/9 Madison Park, New York <br/>
+											flamerestaurant.ny@gmail.com<br/>
+											+33 123 456 789 (Flame)
+										</p>
+									</div>
+								</div>
+								<div class="communication">
+									<div class="info_body">
+										<h5>Utah</h5>
+										<p>112/9 Madison Park, New York <br/>
+											flamerestaurant.ny@gmail.com<br/>
+											+33 123 456 789 (Flame)
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-5">
+							<div class="contact_us">
+								<div class="section_header">
+									<h2 class="section_title">Keep in Touch</h2>
+									<h6 class="section_sub_title">Send us mail if you have anything to suggest</h6>
+								</div>
+								<form class="contact_form"  method="post" asp-controller="home" asp-action="contact" enctype="multipart/form-data">
+									<div class="form-container">
+										<div class="form-group">
+									<input type="text" asp-for="Name" class="form-control" placeholder="Your Name*" required="" value="@ViewBag.Name">
+											<span asp-validation-for="Name"></span>
+										</div>
+										<div class="form-group">
+									<input type="email" asp-for="Email" class="form-control" placeholder="Your Email Address*" required="" value="@ViewBag.Email">
+									<span asp-validation-for="Email"></span>
+										</div>
+										<div class="form-group">
+											<textarea asp-for="Message" class="form-control" placeholder="Message Here*" required="" style="color:black"></textarea>
+									<span asp-validation-for="Message"></span>
+										</div>
+										<div class="form-group">
+											<input class="button" type="submit">
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<img src="~/images/about/photo-1517248135467-4c7edcad34c4.jpeg" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+

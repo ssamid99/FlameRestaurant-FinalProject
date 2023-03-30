@@ -47,17 +47,24 @@ namespace FlameRestaurant.WebUI.Controllers
 
                 if (foundedUser == null)
                 {
-                    ModelState.AddModelError("Username", "Istifadeci adiniz yaxud shifreniz yanlishdir!");
+                    ModelState.AddModelError("Email", "Your email or password is incorrect!");
                     goto end;
                 }
 
+                var userm = await userManager.IsEmailConfirmedAsync(foundedUser);
+
+                if (userm == false)
+                {
+                    ModelState.AddModelError("EmailConfirmed", "Confirm Email!");
+                    goto end;
+                }
 
 
                 var signinResult = await signInManager.PasswordSignInAsync(foundedUser, user.Password, true, true);
 
                 if (!signinResult.Succeeded)
                 {
-                    ModelState.AddModelError("Username", "Istifadeci adiniz yaxud shifreniz yanlishdir!");
+                    ModelState.AddModelError("Email", "Your email or password is incorrect!");
                     goto end;
                 }
 
@@ -98,18 +105,18 @@ namespace FlameRestaurant.WebUI.Controllers
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
                     string path = $"{Request.Scheme}://{Request.Host}/registration-confirm.html?email={user.Email}&token={token}";
 
-                    var emailResponse = await emailService.SendMailAsync(user.Email, "Registration for LoginApp.com", $"Abuneliyinizi <a href='{path}'>link</a> vasitesile tesdiq edin");
+                    var emailResponse = await emailService.SendMailAsync(user.Email, "Registration for FlameRestaurant", $"Confirm your subscription with this <a href='{path}'>link</a>.");
 
                     if (emailResponse)
                     {
-                        ViewBag.Message = "Qeydiyyat uğurla tamamlandı";
+                        ViewBag.Message = "Registration is successfully completed";
                     }
                     else
                     {
-                        ViewBag.Message = " E-mail' göndərərkən xəta baş verdi, zəhmət olmasa yenidən cəhd edin";
+                        ViewBag.Message = "An error has occurred while sending email!";
                     }
                     //email confirmsizdir
-                    ViewBag.Message = "Tebrikler siz qeydiyyat oldunuz";
+                    ViewBag.Message = "Congratulations, you have successfully registered";
                     return RedirectToAction(nameof(Signin));
                 }
 
@@ -127,7 +134,7 @@ namespace FlameRestaurant.WebUI.Controllers
             var foundedUser = await userManager.FindByEmailAsync(email);
             if (foundedUser == null)
             {
-                ViewBag.Message = "Xetalı token";
+                ViewBag.Message = "Invalid token";
                 goto end;
             }
             token = token.Replace(" ", "+");
@@ -135,14 +142,87 @@ namespace FlameRestaurant.WebUI.Controllers
 
             if (!result.Succeeded)
             {
-                ViewBag.Message = "Xetalı token";
+                ViewBag.Message = "Invalid token";
                 goto end;
             }
 
-            ViewBag.Message = "Hesabiniz Tesdiqlendi";
+            ViewBag.Message = "Your account is approved!";
         end:
             return RedirectToAction(nameof(Signin));
         }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(FlameRestaurantForgotPassword model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var foundedUser = await userManager.FindByEmailAsync(model.Email);
+
+            if (foundedUser != null && await userManager.IsEmailConfirmedAsync(foundedUser))
+            {
+                var token = await userManager.GeneratePasswordResetTokenAsync(foundedUser);
+                token = token.Replace(" ", "+");
+                string path = $"{Request.Scheme}://{Request.Host}/reset-password.html?email={foundedUser.Email}&token={token}";
+
+                var emailResponse = await emailService.SendMailAsync(foundedUser.Email, "Reset Password", $"To reset your password click this <a href='{path}'>link</a>!");
+                return View("ForgotPasswordConfirmation");
+            }
+            return View(model);
+        }
+
+        [Route("reset-password.html")]
+        [HttpGet]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (token == null || email == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var model = new ResetPasswordModel();
+            model.Token = token.Replace(" ", "+");
+            model.Email = email;
+            return View(model);
+        }
+
+        [Route("reset-password.html")]
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var foundedUser = await userManager.FindByEmailAsync(model.Email);
+
+            if (foundedUser == null)
+            {
+                return View(model);
+            }
+            var result = await userManager.ResetPasswordAsync(foundedUser, model.Token.Replace(" ", "+"), model.Password);
+
+            if (result.Succeeded)
+            {
+                return View("ResetPasswordConfirmation");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
+        }
+
         [Route("/logout.html")]
         public async Task<IActionResult> Logout()
         {

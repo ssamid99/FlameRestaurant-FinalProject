@@ -1,0 +1,23 @@
+﻿@model ReservationPostCommand
+
+<div asp-validation-summary="All"></div>
+<div class="form-container">
+    <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" asp-for="Name" class="form-control" placeholder="Ex: John Doe" required="" value="@ViewBag.Name">
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div class="form-group">
+        <label for="number">No. of Person</label>
+        <input type="number" id="number" asp-for="NumberofPeople" class="form-control" placeholder="No. of Person" required="">
+        <span asp-validation-for="NumberofPeople"></span>
+    </div>
+    <div class="form-group">
+        <label for="date">Date</label>
+        <input type="datetime-local" id="date" asp-for="Date" class="form-control" required="">
+        <span asp-validation-for="Date"></span>
+    </div>
+    <div class="button_group">
+        <button class="button" type="submit" >Reserve A Table</button>
+    </div>
+</div>

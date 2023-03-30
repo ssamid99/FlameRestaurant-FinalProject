@@ -1,0 +1,15 @@
+﻿@model BlogPostComment
+
+<li class="comment @(Model.ParentId !=null?"replay":"")" id="c-@Model.Id" data-comment-id="@Model.Id">
+    <div class="commenter-block">
+        <div class="commenter">
+        </div>
+        <div class="comment-content">
+            <h4 class="comment-author-name">@($"{Model.CreatedByUser?.Name} {Model.CreatedByUser?.Surname}") <span class="comment-reply replay"><a class="comment-reply-link btn-comment-reply">Reply <i class="ion-chevron-right"></i><i class="ion-chevron-right"></i></a></span></h4>
+            <p class="comment-author-comment">
+                @Model.Text.ToPlainText();
+            </p>
+            <h6 class="comment-date">@Model.CreatedDate.ToString("MMMM d,yyyy ")</h6>
+        </div>
+    </div>
+</li>

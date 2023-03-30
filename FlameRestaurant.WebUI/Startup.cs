@@ -64,7 +64,7 @@ namespace FlameRestaurant.WebUI
                 cfg.Password.RequiredLength = 3;
 
                 cfg.User.RequireUniqueEmail = true;
-
+                cfg.SignIn.RequireConfirmedEmail = true;
                 cfg.Lockout.MaxFailedAccessAttempts = 3;
                 cfg.Lockout.DefaultLockoutTimeSpan = new TimeSpan(0, 3, 0);
             });

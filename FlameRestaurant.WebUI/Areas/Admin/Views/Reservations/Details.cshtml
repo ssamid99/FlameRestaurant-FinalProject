@@ -91,10 +91,6 @@
                                     {
                                         <a asp-action="edit" name="" asp-route-id=@Model.Id class="btn btn-warning mr-2 fix-btn">Edit</a>
                                     }
-                                    @if (User.HasAccess("admin.reservations.delete"))
-                                    {
-                                        <a class="btn btn-sm btn-danger fix-btn" onclick="removeEntity(@Model.Id, '@Model.Name')"><i class="fa-solid fa-trash-can"></i></a>
-                                    }
                                     @if (User.HasAccess("admin.reservations.index"))
                                     {
                                         <a asp-action="index" class="btn btn-info">Cancel</a>
@@ -109,45 +105,4 @@
     </div>
 </div>
 
-@section addjs{
 
-    <script class="removeable">
-        function removeEntity(id, name) {
-            swal(`Are you sure you want to delete ${name}?`, {
-                title: "Diqqet!",
-                text: `${name} adına olan reservasiyani silmək istədiyinizdən əminsiniz?`,
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-                buttons: ["No", "Yes"]
-            })
-                .then((value) => {
-                    if (value == true) {
-                        let vToken = $('[name=__RequestVerificationToken]').val();
-                        let formData = new FormData();
-                        formData.set('__RequestVerificationToken', vToken);
-                        formData.set('id', id);
-                        $.ajax({
-                            url: `@Url.Action("Delete")`,
-                            type: 'POST',
-                            data: formData,
-                            contentType: false,
-                            processData: false,
-                            success: function (response) {
-                                console.log(response)
-                                if (response.error == true) {
-                                    toaster.error(response.message, "Xəta");
-                                    return;
-                                }
-                                location.reload();
-                            },
-                            error: function (errorResponse) {
-                                console.error(errorResponse);
-                            }
-                        });
-                    }
-                });
-        }
-
-    </script>
-    }

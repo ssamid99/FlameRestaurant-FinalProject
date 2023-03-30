@@ -1,0 +1,62 @@
+﻿@model PagedViewModel<BlogPost>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="page-header">
+    <div class="page-header-content bg_image_header jarallax">
+        <div class="container">
+            <h1 class="heading">Blog</h1>
+        </div>
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <div class="container">
+
+        <div id="dynamic-content" class="blog_classic dark">
+            <partial name="_PostBody" model="@Model" />
+        </div>
+
+        <ul class="pagination center dark">
+        <li><a class="disabled page-number previous" href="#"><i class="ion-ios-arrow-thin-left"></i></a></li>
+        <li><span class="page-number current">1</span></li>
+        <li><a class="page-number" href="#">2</a></li>
+        <li>.....</li>
+        <li><a class="page-number" href="#">9</a></li>
+        <li><a class="page-number next" href="#"><i class="ion-ios-arrow-thin-right"></i></a></li>
+        </ul>
+    </div>
+</div>
+
+@section addjs{
+
+    <script>
+        function goPage(pageIndex, pageSize) {
+            $.ajax({
+                url: `@Url.Action("Index")?pageIndex=${pageIndex}&pageSize=${pageSize}`,
+                method: 'GET',
+                success: function (response) {
+                    $('#dynamic-content').html(response);
+                    location.hash = '#dynamic-content';
+                    location.hash = '';
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        }
+    </script>
+}
+
+    @section addcss{
+    <style>
+        .shorttext {
+            width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+					}

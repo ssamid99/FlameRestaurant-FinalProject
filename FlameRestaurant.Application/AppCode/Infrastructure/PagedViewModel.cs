@@ -59,7 +59,7 @@ namespace FlameRestaurant.Application.AppCode.Infrastructure
             StringBuilder builder = new StringBuilder();
             bool hasPaginationFunction = !string.IsNullOrWhiteSpace(paginateFunction);
 
-            builder.Append("<ul class='pagination ptb-20'>");
+            builder.Append("<ul class='pagination center dark'>");
 
             if (this.PageIndex > 1)
             {
@@ -72,13 +72,13 @@ namespace FlameRestaurant.Application.AppCode.Infrastructure
                         area
                     });
 
-                builder.Append($@"<li class='prev'>
-                                <a href='{link}'><i class='fa fa-angle-left'></i></a>
+                builder.Append($@"<li class='page-number previous'>
+                                <a href='{link}'><i class='ion-ios-arrow-thin-left'></i></a>
                                 </li>");
             }
             else
             {
-                builder.Append("<li class='prev disabled'><a><i class='fa fa-angle-left'></i></a></li>");
+                builder.Append("<li class='disabled page-number previous'><a><i class='ion-ios-arrow-thin-left'></i></a></li>");
             }
 
             int min = 1, max = this.MaxPageCount;
@@ -100,7 +100,7 @@ namespace FlameRestaurant.Application.AppCode.Infrastructure
             {
                 if (i == this.PageIndex)
                 {
-                    builder.Append($"<li class='active'><a>{i}</a></li>");
+                    builder.Append($"<li class='page-number current'><a>{i}</a></li>");
                     continue;
                 }
 
@@ -113,7 +113,7 @@ namespace FlameRestaurant.Application.AppCode.Infrastructure
                         area
                     });
 
-                builder.Append($"<li><a href='{link}'>{i}</a></li>");
+                builder.Append($"<li class='page-number'><a href='{link}'>{i}</a></li>");
 
             }
 
@@ -129,13 +129,13 @@ namespace FlameRestaurant.Application.AppCode.Infrastructure
                         area
                     });
 
-                builder.Append($@"<li class='next'>
-                                <a href='{link}'><i class='fa fa-angle-right'></i></a>
+                builder.Append($@"<li class='page-number next'>
+                                <a href='{link}'><i class='ion-ios-arrow-thin-right'></i></a>
                                 </li>");
             }
             else
             {
-                builder.Append("<li class='next disabled'><a><i class='fa fa-angle-right'></i></a></li>");
+                builder.Append("<li class='page-number next disabled'><a><i class='ion-ios-arrow-thin-right'></i></a></li>");
             }
 
 

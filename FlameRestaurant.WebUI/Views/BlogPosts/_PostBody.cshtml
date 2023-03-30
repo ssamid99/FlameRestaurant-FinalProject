@@ -1,0 +1,37 @@
+﻿@model PagedViewModel<BlogPost>
+
+<div class="row">
+	@foreach(var item in Model.Items){
+	<div class="col-lg-4 col-md-4">
+		<article class="blog_post">
+			<div class="post_img">
+				<img src="~/uploads/images/@item.ImagePath" alt="blog">
+				<div class="calendar">
+						<a asp-controller="blogposts" asp-action="details" asp-route-id="@item.Id" asp-route-slug="@item.Slug">@item.PublishedDate?.ToString("MMM") <br> <span class="date">@item.PublishedDate?.ToString("dd")</span></a>
+				</div>
+			</div>
+			<div class="post_content">
+				<div class="post_header">
+					<div class="metalist">
+							<span class="author"><a asp-controller="blogposts" asp-action="details" asp-route-id="@item.Id" asp-route-slug="@item.Slug">Dessert - By @item.CreatedByUser?.Name</a></span>
+					</div>
+					<h3 class="post_title">
+							<a asp-controller="blogposts" asp-action="details" asp-route-id="@item.Id" asp-route-slug="@item.Slug">@item.Title</a>
+					</h3>
+				</div>
+				<div class="post_intro">
+					<p class="shorttext">@Html.Raw(item.Body)</p>
+				</div>
+				<div class="post_footer">
+					<div class="read_more">
+							<a asp-controller="blogposts" asp-action="details" asp-route-id="@item.Id" asp-route-slug="@item.Slug">See More</a>
+					</div>
+				</div>
+			</div>
+		</article>
+	</div>
+	}
+</div>
+@*<ul class="pagination centred clearfix">*@
+	@Model.GetPager(Url, "Index", paginateFunction: "goPage")
+@*</ul>*@

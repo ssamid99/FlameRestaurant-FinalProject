@@ -1,84 +1,73 @@
 ﻿@model RegisterModel
 @{
-    ViewData["Title"] = "Qeydiyyat";
-    Layout = null;
+    ViewData["Title"] = "Register";
 }
 
-<!DOCTYPE html>
-<html lang="en">
+<div class="login-bg">
 
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-<head>
+    <section class="vh-100">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-xl-7">
+                    <div class="card" style="border-radius: 1rem;">
+                        <div class="row g-0">
+                            <div class="col-lg-12 col-lg-7 d-flex align-items-center">
+                                <div class="card-body p-4 p-lg-5 text-black">
+                                    <form method="post" asp-controller="account" asp-action="register">
+                                        <div style="width: 100%; height: 110px;" class="d-flex justify-content-center align-items-center mb-2 pb-1">
+                                            <img style="width: 160px;" src="~/images/logo copy2.png" alt="">
+                                        </div>
 
-</head>
+                                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Register</h5>
 
-<body>
-    <form method="post" autocomplete="off">
+                                        <div>
+                                            <div asp-validation-summary="All"></div>
+                                            @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+                                            {
+                                                <div style="color:red">
+                                                    @ViewBag.Message
+                                                </div>
+                                            }
+                                        </div>
 
-        <div>
-            <div>
-                <div>
-                    <div asp-validation-summary="All"></div>
-                    @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
-                    {
-                        <div style="color:red">
-                            @ViewBag.Message
+                                        <div class="form-outline mb-3">
+                                            <input type="text" asp-for="Name" id="form2Example17" class="form-control form-control-lg" />
+                                            <label class="form-label" for="form2Example17">Name</label>
+                                        </div>
+
+                                        <div class="form-outline mb-3">
+                                            <input type="text" asp-for="Surname" id="form2Example17" class="form-control form-control-lg" />
+                                            <label class="form-label" for="form2Example17">Surname</label>
+                                        </div>
+
+                                        <div class="form-outline mb-3">
+                                            <input type="email" asp-for="Email" id="form2Example17" class="form-control form-control-lg" />
+                                            <label class="form-label" for="form2Example17">Email address</label>
+                                        </div>
+
+                                        <div class="form-outline mb-3">
+                                            <input type="password" asp-for="Password" id="form2Example27" class="form-control form-control-lg" />
+                                            <label class="form-label" for="form2Example27">Password</label>
+                                        </div>
+
+                                        <div class="form-outline mb-3">
+                                            <input type="password" asp-for="ConfirmPassword" id="form2Example27" class="form-control form-control-lg" />
+                                            <label class="form-label" asp-for="ConfirmPassword" for="form2Example27">Confirm Password</label>
+                                        </div>
+
+                                        <div class="pt-1 mb-3">
+                                            <button class="btn btn-dark btn-lg btn-block" type="submit">Register</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
                         </div>
-                    }
-                </div>
-                <div>
-                    <div>
-                        <h3>
-                            Register
-                        </h3>
-                        <h3>
-                            <a asp-action="Signin">SignIn</a>
-                        </h3>
-                    </div>
-                </div>
-                <div>
-                    <input placeholder=" Name" asp-for="Name">
-                </div>
-                <div>
-                    <input placeholder=" Surname" asp-for="Surname">
-                </div>
-                <div>
-                    <input placeholder=" EmaiL" asp-for="Email">
-                </div>
-                <div>
-                    <input type="password" placeholder="Password" asp-for="Password">
-                </div>
-                <div>
-                    <input type="password" placeholder="ConfirmPassword" asp-for="ConfirmPassword">
-                </div>
-                <div>
-                    <div>
-                        <div>
-                            <label>
-                                <input type="checkbox" value="">
-                                <span>
-                                    <i></i>
-                                </span>
-                                <span>Remember me</span>
-                            </label>
-                        </div>
-                        <div>
-                            <a href="auth-reset-password.html">
-                                Forgot
-                                Password?
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <button type="submit"> Sign in</button>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
-</body>
+    </section>
 
+</div>
 
-</html>
