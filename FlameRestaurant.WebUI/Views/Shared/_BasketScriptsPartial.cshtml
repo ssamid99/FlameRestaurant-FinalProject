@@ -85,8 +85,8 @@
                     console.log(response.value.summary);
                     if (response.error == false) {
 
-                        $(element).closest('section').find('.amount').text(`${response.value.price}₼`);
-                        $(element).closest('section').find('.product-subtotal').text(`${response.value.total}₼`);
+                        $(element).closest('tr.cart_content').find('.amount').text(`${response.value.price}₼`);
+                        $(element).closest('tr.cart_content').find('.product-subtotal').text(`${response.value.total}₼`);
                         $('#summary').text(`${response.value.summary}₼`);
                         toastr.success(response.message, 'Success');
                         return;

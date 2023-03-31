@@ -84,14 +84,14 @@
                     </ul>
                 </li>
             }
-            @if (User.HasAccess("admin.people.index"))
+            @if (User.HasAccess("admin.abouts.index"))
             {
                 <li>
-                    <a asp-controller="People" asp-action="index">
+                    <a asp-controller="abouts" asp-action="index">
                         <span class="pcoded-micon">
                             <i class="feather icon-users"></i>
                         </span>
-                        <span class="pcoded-mtext">Əlavə Qonaq Növləri</span>
+                        <span class="pcoded-mtext">About</span>
                     </a>
                 </li>
             }

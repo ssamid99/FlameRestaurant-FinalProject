@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Product>
+
+<div class="related_products">
+    <div class="container">
+        <div class="section_header">
+            <h2 class="section_title">Related Products</h2>
+            <h6 class="section_sub_title">Choose similar product from the list</h6>
+        </div>
+        <div class="product_view_grid four_col product_slick">
+            @foreach(var item in Model){
+            <div class="item">
+                <div class="product_item">
+                    <div class="product_imagebox">
+                            <img class="primary_img" src="~/uploads/images/@item.ImagePath" alt="@item.Name" style="width:270px; height:270px;">
+                        <div class="product_item_inner">
+                            <div class="button_group">
+                                    <a class="button" onclick="addToBasket(event)" data-product-id="@item.Id">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="label_text">
+                            <h5 class="product_item_name"><a asp-controller="products" asp-action="details" asp-route-id="@item.Id">@item.Name</a></h5>
+                        <div class="rating">
+                                <rate rate-value="@item.Rate" rate-product-id="@item.Id" style="justify-content:center;"></rate>
+                        </div>
+                        <h6 class="product_item_price">$@item.Price</h6>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+

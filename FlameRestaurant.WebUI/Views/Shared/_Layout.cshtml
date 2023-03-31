@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <meta name="description" content="Multipages HTML5 Template">
+    <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Page Title -->
@@ -20,6 +20,9 @@
     <link href="~/images/apple-touch-icon-144x144.html" rel="apple-touch-icon" sizes="144x144">
     <link rel="stylesheet" href="~/css/login.css" />
     <link href="~/css/style.css" rel="stylesheet" type="text/css">
+    <link href="~/css/rate.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/d2b183de45.js"
+            crossorigin="anonymous"></script>
     @RenderSection("addcss", required:false)
 </head>
 
@@ -44,9 +47,8 @@
 
                     <div class="nav_more_info">
                         <div class="element">
-                            <a asp-controller="products" asp-action="basket" class="cart_icon"><i class="icon-basket"></i> <span class="count">2</span></a>
+                            <a asp-controller="products" asp-action="basket">Bas</a>
                             @*<a asp-controller="products" asp-action="wishlist" class="wishlist_icon"><i class="icon-heart"></i></a>*@
-
                         </div>
                     </div>
 
@@ -66,7 +68,7 @@
                             <li class="menu-item"><a asp-controller="home" asp-action="team">Team</a></li>
                             <li class="menu-item logo-item"><a asp-controller="home" asp-action="index"><img src="~/images/logo copy2.png" alt="logo"></a></li>
                             <li class="menu-item menu-item-has-children">
-                                <a href="shop-4col.html">Shop</a>
+                                <a asp-controller="products" asp-action="index">Shop</a>
                             </li>
                             <li class="menu-item menu-item-has-children">
                                 <a asp-controller="blogposts" asp-action="index">Blog</a>

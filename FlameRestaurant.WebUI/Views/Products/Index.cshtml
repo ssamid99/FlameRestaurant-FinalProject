@@ -3,63 +3,35 @@
     ViewData["Title"] = "Index";
 }
 
-<main id="tg-main" class="tg-main tg-haslayout">
-    <!--************************************
-            Inner Banner Start
-    *************************************-->
-    <div class="tg-innerbanner tg-haslayout tg-parallax tg-bginnerbanner"
-         data-z-index="-100"
-         data-appear-top-offset="600"
-         data-parallax="scroll"
-         data-image-src=@Url.Content("~/assets/images/parallax/bgparallax-07.jpg")>
+<div class="page-header">
+    <div class="page-header-content bg_image_header jarallax">
         <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="tg-innerbannercontent">
-                        <h1>All Books</h1>
-                        <ol class="tg-breadcrumb">
-                            <li><a href="javascript:void(0);">home</a></li>
-                            <li class="tg-active">Books</li>
-                        </ol>
-                    </div>
-                </div>
+            <h1 class="heading">Shop</h1>
+        </div>
+    </div>
+</div>
+
+<div class="main-wrapper">
+    <div class="container">
+        <div class="shopping light_shop">
+            <div class="product_view_grid four_col" id="products">
+                <partial name="_Products" model="@Model" />
             </div>
         </div>
     </div>
-    <!--************************************
-            Inner Banner End
-    *************************************-->
-    <!--************************************
-                News Grid Start
-        *************************************-->
-    <div class="tg-sectionspace tg-haslayout">
-        <div class="container">
-            <div class="row">
-                <div id="tg-twocolumns" class="tg-twocolumns">
-                    <div class="col-xs-12 col-sm-8 col-md-8 col-lg-9 pull-right">
-                        <div id="tg-content" class="tg-content">
-                            <div class="tg-products">
-                                <div class="tg-sectionhead">
-                                    <h2><span>People’s Choice</span>Bestselling Books</h2>
-                                </div>
-                                <div id="products">
-                                    <partial name="_Products" model="@Model" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--************************************
-                News Grid End
-        *************************************-->
-</main>
+</div>
 
 @section addcss{
     <style>
+        .productimg{
+            width: 270px;
+            height: 270px;
+        }
+
+        .center-rate{
+            justify-content: center;
+        }
+
         [data-entity-type] {
             position: relative;
             padding-left: 30px;

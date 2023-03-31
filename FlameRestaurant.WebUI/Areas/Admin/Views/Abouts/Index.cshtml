@@ -1,0 +1,93 @@
+﻿@model About
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Otel Haqqında</h2>
+@if (User.HasAccess("admin.abouts.create"))
+{
+    @if (ViewBag.IsTableEmpty)
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <div class="row align-items-end">
+            <div class="col-lg-8">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4>Bootstrap Border Sizes</h4>
+                        <span>
+                            lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="page-header-breadcrumb">
+                    <ul class="breadcrumb-title">
+                        <li class="breadcrumb-item" style="float: left;">
+                            <a asp-controller="Dashboard" asp-action="index"> <i class="feather icon-home"></i> </a>
+                        </li>
+                        @if (User.HasAccess("admin.abouts.index"))
+                        {
+                            <li class="breadcrumb-item" style="float: left;">
+                                <a asp-action="index">FlameRestaurant</a>
+                            </li>
+                        }
+                        <li class="breadcrumb-item" style="float: left;">
+                            <span>Index</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    @if (ViewBag.IsTableEmpty == false)
+                    {
+                        <div class="card-block">
+
+
+                            <div>
+                                <div class="form-group row">
+                                    <label asp-for="Title" class="col-sm-2 col-form-label"></label>
+                                    <p>
+                                        @Model?.Title
+                                    </p>
+                                </div>
+                                <div class="form-group row">
+                                    <label asp-for="Text" class="col-sm-2 col-form-label"></label>
+                                    <p>
+                                        @Html.Raw(Model?.Text)
+                                    </p>
+                                </div>
+                                
+                                @if (!ViewBag.IsTableEmpty)
+                                {
+                                    <div class="form-group row">
+                                        <div class="col-12 d-flex justify-content-end">
+                                            @if (User.HasAccess("admin.abouts.edit"))
+                                            {
+                                                <a asp-action="Edit" asp-route-id=@Model?.Id class="btn btn-warning mr-2">Edit</a>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using FlameRestaurant.Application.AppCode.Extensions;
+using FlameRestaurant.Domain.Business.AboutModule;
 using FlameRestaurant.Domain.Business.AboutModule.Teams;
 using FlameRestaurant.Domain.Business.CategoryModule;
 using FlameRestaurant.Domain.Business.ContactPostModule;
@@ -32,6 +33,15 @@ namespace FlameRestaurant.WebUI.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        public async Task<IActionResult> About(AboutGetAllQuery query)
+        {
+            var response = await mediator.Send(query);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return View(response);
         }
 
         public async Task<IActionResult> Menu(CategoryGetAllQuery query)

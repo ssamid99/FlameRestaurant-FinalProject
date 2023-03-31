@@ -26,6 +26,7 @@ namespace FlameRestaurant.Domain.Models.DbContexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Basket> Basket { get; set; }
+        public DbSet<About> Abouts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

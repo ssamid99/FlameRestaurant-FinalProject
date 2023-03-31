@@ -64,7 +64,8 @@ namespace FlameRestaurant.WebUI.Controllers
         }
 
 
-
+        [HttpGet]
+        [ActionName("Basket")]
         //[Route("/basket")]
         public async Task<IActionResult> Basket(ProductBasketQuery query)
         {
@@ -106,6 +107,7 @@ namespace FlameRestaurant.WebUI.Controllers
             return Json(response);
         }
 
+        [HttpGet]
         //[Route("/checkout")]
         public async Task<IActionResult> Checkout(ProductBasketQuery query)
         {

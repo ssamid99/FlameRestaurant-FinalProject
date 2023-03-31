@@ -74,7 +74,7 @@ namespace FlameRestaurant.WebUI
 
                 cfg.LoginPath = "/signin.html";
                 cfg.AccessDeniedPath = "/accessdenied.html";
-                cfg.ExpireTimeSpan = new TimeSpan(0, 15, 0);
+                cfg.ExpireTimeSpan = new TimeSpan(0, 30, 0);
                 cfg.Cookie.Name = "FlameRestaurant";
             });
 

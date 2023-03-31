@@ -1,0 +1,86 @@
+﻿.rate {
+    display: flex;
+}
+
+    .rate li {
+        color: #f9ba48;
+        margin-right: 1px;
+        list-style: none;
+        font-family: "Font Awesome 5 Free";
+        cursor: pointer;
+    }
+
+        .rate li::before {
+            content: "\f005";
+            font-weight: 400;
+        }
+
+    .rate.rate-half1 li:nth-child(1)::before {
+        content: "\f5c0";
+        font-weight: 900;
+    }
+
+    .rate.rate-1 li:nth-child(1)::before,
+    .rate.rate-half2 li:nth-child(1)::before,
+    .rate.rate-3 li:nth-child(1)::before,
+    .rate.rate-3 li:nth-child(2)::before,
+    .rate.rate-half3 li:nth-child(1)::before,
+    .rate.rate-half3 li:nth-child(2)::before,
+    .rate.rate-half4 li:nth-child(1)::before,
+    .rate.rate-half4 li:nth-child(2)::before,
+    .rate.rate-half4 li:nth-child(3)::before,
+    .rate.rate-4 li:nth-child(1)::before,
+    .rate.rate-4 li:nth-child(2)::before,
+    .rate.rate-4 li:nth-child(3)::before,
+    .rate.rate-half5 li:nth-child(1)::before,
+    .rate.rate-half5 li:nth-child(2)::before,
+    .rate.rate-half5 li:nth-child(3)::before,
+    .rate.rate-half5 li:nth-child(4)::before,
+    .rate.rate-5 li:nth-child(1)::before,
+    .rate.rate-5 li:nth-child(2)::before,
+    .rate.rate-5 li:nth-child(3)::before,
+    .rate.rate-5 li:nth-child(4)::before {
+        content: "\f005";
+        font-weight: 900;
+    }
+
+    .rate.rate-half2 li:nth-child(2)::before {
+        content: "\f5c0";
+        font-weight: 900;
+    }
+
+    .rate.rate-2 li:nth-child(1)::before,
+    .rate.rate-2 li:nth-child(2)::before {
+        content: "\f005";
+        font-weight: 900;
+    }
+
+    .rate.rate-half3 li:nth-child(3)::before {
+        content: "\f5c0";
+        font-weight: 900;
+    }
+
+    .rate.rate-3 li:nth-child(3)::before {
+        content: "\f005";
+        font-weight: 900;
+    }
+
+    .rate.rate-half4 li:nth-child(4)::before {
+        content: "\f5c0";
+        font-weight: 900;
+    }
+
+    .rate.rate-4 li:nth-child(4)::before {
+        content: "\f005";
+        font-weight: 900;
+    }
+
+    .rate.rate-half5 li:nth-child(5)::before {
+        content: "\f5c0";
+        font-weight: 900;
+    }
+
+    .rate.rate-5 li:nth-child(5)::before {
+        content: "\f005";
+        font-weight: 900;
+    }

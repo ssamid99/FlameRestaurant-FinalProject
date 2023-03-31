@@ -1,58 +1,36 @@
-﻿@addTagHelper *, FlameRestaurant.WebUI
-@model PagedViewModel<Product>
-<div class="tg-productgrid">
-    @foreach (var item in Model.Items)
+﻿@model PagedViewModel<Product>
+<div class="row">
+    @if (Model.Items.Any())
     {
-        <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
-            <div class="tg-postbook">
-                <figure class="tg-featureimg">
-                    <div class="tg-bookimg">
-                        <div class="tg-frontcover">
-                            <img src="~/uploads/images/@item.ImagePath"
-                             alt="@item.Name" />
+        @foreach (var item in Model.Items)
+        {
+            <div class="col-lg-3 col-md-6">
+                <div class="product_item">
+                    <div class="product_imagebox">
+                        <img class="primary_img productimg" src="~/uploads/images/@item.ImagePath" alt="@item.Name">
+                        <div class="product_item_inner">
+                            <div class="button_group">
+                                <a class="button" onclick="addToBasket(event)" data-product-id="@item.Id">Add to Basket</a>
+                            </div>
                         </div>
-                        <div class="tg-backcover">
-                            <img src="~/uploads/images/@item.ImagePath"
-                             alt="@item.Name" />
+                    </div>
+                    <div class="label_text">
+                        <h5 class="product_item_name"><a asp-controller="products" asp-action="details" asp-route-id="@item.Id">@item.Name</a></h5>
+                        <div class="rate center-rate">
+                            <rate rate-value="@item.Rate" rate-product-id="@item.Id"></rate>
                         </div>
+                        <h6 class="product_item_price">$@item.Price</h6>
                     </div>
-                    <a class="tg-btnaddtowishlist"
-                   href="javascript:addToFavorites(@item.Id);">
-                        <i class="icon-heart"></i>
-                        <span>add to wishlist</span>
-                    </a>
-                </figure>
-                <div class="tg-postbookcontent">
-                    <ul class="tg-bookscategories">
-                        <li>
-                            <a href="javascript:void(0);">@item.Category.Name</a>
-                        </li>
-                    </ul>
-                    <div class="tg-themetagbox">
-                        <span class="tg-themetag">sale</span>
-                    </div>
-                    <div class="tg-booktitle">
-                        <h3>
-                            <a asp-action="details" asp-route-id="@item.Id">@item.Name</a>
-                        </h3>
-                    </div>
-                    <div class="tg-stars">
-                        <rate rate-value="@item.Rate" rate-product-id="@item.Id"></rate>
-                    </div>
-                    <span class="tg-bookprice">
-                        <ins>@(item.Price) ₼</ins>
-                        <del>@item.Price ₼</del>
-                    </span>
-                    <a class="tg-btn tg-btnstyletwo"
-                   onclick="addToBasket(event)" data-product-id="@item.Id">
-                        <i class="fa fa-shopping-basket"></i>
-                        <em>Add To Basket</em>
-                    </a>
                 </div>
             </div>
+        }
+    }
+    else
+    {
+        <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+            <p>No product was found!</p>
         </div>
     }
 </div>
-
 
 
